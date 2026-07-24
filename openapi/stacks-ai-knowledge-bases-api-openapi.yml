@@ -1,0 +1,1039 @@
+openapi: 3.1.0
+info:
+  title: StackAI analytics Knowledge Bases API
+  version: 0.1.0
+  description: StackAI public REST API for running deployed agentic workflows (flows), managing Knowledge Bases and their file resources, and reading flow-run analytics. Assembled verbatim from the per-endpoint OpenAPI 3.1.0 documents published at https://docs.stackai.com/interface-and-deployment/api-reference.
+  contact:
+    name: StackAI
+    url: https://www.stackai.com/
+servers:
+- url: https://api.stack-ai.com
+  description: Primary API host (knowledge bases, analytics, document upload)
+- url: https://stack-inference.com
+  description: Inference host for running deployed flows
+tags:
+- name: Knowledge Bases
+paths:
+  /v1/knowledge-bases/{knowledge_base_id}/resources:
+    get:
+      tags:
+      - Knowledge Bases
+      summary: List Resources
+      description: List files in the knowledge base with optional cursor pagination.
+      operationId: listKnowledgeBaseResources
+      parameters:
+      - name: knowledge_base_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Knowledge Base Id
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Optional identifier for the page that should be returned. If it is not provided, the first page will be returned.
+          title: Cursor
+        description: Optional identifier for the page that should be returned. If it is not provided, the first page will be returned.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          description: Number of items to be returned in the page.
+          default: 50
+          title: Page Size
+        description: Number of items to be returned in the page.
+      - name: direction
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/PaginationDirection'
+          description: 'Direction for pagination: ''next'' to advance through pages (older items), ''prev'' to go back (newer items)'
+          default: next
+        description: 'Direction for pagination: ''next'' to advance through pages (older items), ''prev'' to go back (newer items)'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeBaseResourcesResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Knowledge Bases
+      summary: Create Resource
+      description: 'Upload a file directly to a knowledge base and start indexing.
+
+
+        This endpoint allows API users to upload files directly without needing to use
+
+        presigned URLs. The file is uploaded to storage and indexing is started automatically.
+
+        Returns the resource ID so callers can poll for indexing status.'
+      operationId: uploadKnowledgeBaseResource
+      parameters:
+      - name: knowledge_base_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Knowledge Base Id
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_uploadKnowledgeBaseResource'
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceUploadResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/knowledge-bases/{knowledge_base_id}/resources/{resource_id}:
+    get:
+      tags:
+      - Knowledge Bases
+      summary: Get Resource By Id
+      description: Get one file resource by ID from the knowledge base.
+      operationId: getKnowledgeBaseResource
+      parameters:
+      - name: knowledge_base_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Knowledge Base Id
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Resource Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeBaseFileResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Knowledge Bases
+      summary: Delete Resource By Id
+      description: Delete a file resource by ID.
+      operationId: deleteKnowledgeBaseResource
+      parameters:
+      - name: knowledge_base_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Knowledge Base Id
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Resource Id
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/knowledge-bases/{knowledge_base_id}/sync:
+    post:
+      tags:
+      - Knowledge Bases
+      summary: Synchronize Knowledge Base
+      description: Synchronize the knowledge base.
+      operationId: syncKnowledgeBase
+      parameters:
+      - name: knowledge_base_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Knowledge Base Id
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeBaseSyncResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/knowledge-bases:
+    get:
+      tags:
+      - Knowledge Bases
+      summary: Get Knowledge Bases
+      description: List all available knowledge bases for the specified flow.
+      operationId: listKnowledgeBases
+      parameters:
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Optional identifier for the page that should be returned. If it is not provided, the first page will be returned.
+          title: Cursor
+        description: Optional identifier for the page that should be returned. If it is not provided, the first page will be returned.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: Number of items to be returned in the page.
+          default: 50
+          title: Page Size
+        description: Number of items to be returned in the page.
+      - name: direction
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/PaginationDirection'
+          description: 'Direction for pagination: ''next'' to advance through pages (older items), ''prev'' to go back (newer items)'
+          default: next
+        description: 'Direction for pagination: ''next'' to advance through pages (older items), ''prev'' to go back (newer items)'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/KnowledgeBaseResponse'
+                title: Response Listknowledgebases
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Knowledge Bases
+      summary: Create Knowledge Base
+      description: Create a new knowledge base.
+      operationId: createKnowledgeBase
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateKnowledgeBaseRequest'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeBaseResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/knowledge-bases/{knowledge_base_id}:
+    get:
+      tags:
+      - Knowledge Bases
+      summary: Get Knowledge Base By Id
+      description: Get a knowledge base by its ID in the current organization.
+      operationId: getKnowledgeBase
+      parameters:
+      - name: knowledge_base_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Knowledge Base Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeBaseResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Knowledge Bases
+      summary: Delete Knowledge Base
+      description: Delete a knowledge base by its ID.
+      operationId: deleteKnowledgeBase
+      parameters:
+      - name: knowledge_base_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Knowledge Base Id
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Knowledge Bases
+      summary: Update Knowledge Base
+      description: Update a knowledge base.
+      operationId: updateKnowledgeBase
+      parameters:
+      - name: knowledge_base_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Knowledge Base Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateKnowledgeBaseRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeBaseResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    CreateKnowledgeBaseRequest:
+      properties:
+        connection_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Connection Id
+        connection_source_ids:
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+          title: Connection Source Ids
+        website_sources:
+          items:
+            $ref: '#/components/schemas/SelectedWebsiteSource'
+          type: array
+          title: Website Sources
+        name:
+          type: string
+          maxLength: 2048
+          minLength: 1
+          title: Name
+          default: Unnamed Knowledge Base
+        description:
+          type: string
+          maxLength: 2048
+          title: Description
+          default: ''
+        indexing_params:
+          $ref: '#/components/schemas/KnowledgeBaseIndexingParamsRequest'
+        org_level_role:
+          anyOf:
+          - $ref: '#/components/schemas/KnowledgeBaseRole'
+          - type: 'null'
+      additionalProperties: false
+      type: object
+      title: CreateKnowledgeBaseRequest
+      description: Payload to create a new knowledge base.
+    KnowledgeBaseRole:
+      type: string
+      enum:
+      - viewer
+      - editor
+      - admin
+      title: KnowledgeBaseRole
+      description: A user's role within a knowledge base.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    CreateKnowledgeBaseEmbeddingParams:
+      properties:
+        embedding_model:
+          type: string
+          title: Embedding Model
+          default: openai.text-embedding-3-large
+        api_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Api Key
+      additionalProperties: false
+      type: object
+      title: CreateKnowledgeBaseEmbeddingParams
+      description: Embedding configuration for a new knowledge base.
+    KnowledgeBaseChunkerParams:
+      properties:
+        chunk_size:
+          type: integer
+          minimum: 1
+          title: Chunk Size
+          default: 1500
+        chunk_overlap:
+          type: integer
+          minimum: 0
+          title: Chunk Overlap
+          default: 500
+        chunker_type:
+          $ref: '#/components/schemas/ChunkerType'
+          default: sentence
+      type: object
+      title: KnowledgeBaseChunkerParams
+      description: Chunking strategy for splitting documents during indexing.
+    KnowledgeBaseResponseIndexingParams:
+      properties:
+        ocr:
+          type: boolean
+          title: Ocr
+          default: false
+        embedding_params:
+          $ref: '#/components/schemas/KnowledgeBaseResponseEmbeddingParams'
+        chunker_params:
+          $ref: '#/components/schemas/KnowledgeBaseChunkerParams'
+      type: object
+      required:
+      - embedding_params
+      title: KnowledgeBaseResponseIndexingParams
+      description: Indexing configuration of a knowledge base.
+    DateProperty:
+      properties:
+        type:
+          type: string
+          const: date
+          title: Type
+          default: date
+        description:
+          type: string
+          maxLength: 1024
+          title: Description
+          default: ''
+        order:
+          type: integer
+          minimum: 0
+          title: Order
+          description: Display order of this property within the schema.
+          default: 0
+      type: object
+      title: DateProperty
+    StringProperty:
+      properties:
+        type:
+          type: string
+          const: string
+          title: Type
+          default: string
+        description:
+          type: string
+          maxLength: 1024
+          title: Description
+          default: ''
+        order:
+          type: integer
+          minimum: 0
+          title: Order
+          description: Display order of this property within the schema.
+          default: 0
+        subtype:
+          $ref: '#/components/schemas/StringSubtypeEnum'
+          default: plain
+      type: object
+      title: StringProperty
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    NumberProperty:
+      properties:
+        type:
+          type: string
+          const: number
+          title: Type
+          default: number
+        description:
+          type: string
+          maxLength: 1024
+          title: Description
+          default: ''
+        order:
+          type: integer
+          minimum: 0
+          title: Order
+          description: Display order of this property within the schema.
+          default: 0
+      type: object
+      title: NumberProperty
+    SelectedWebsiteSource:
+      properties:
+        source_type:
+          $ref: '#/components/schemas/SelectedWebsiteSourceType'
+          default: sitemap
+        original_search_term:
+          type: string
+          title: Original Search Term
+        selected_resources:
+          items:
+            type: string
+          type: array
+          title: Selected Resources
+      type: object
+      required:
+      - original_search_term
+      - selected_resources
+      title: SelectedWebsiteSource
+      description: A set of pages selected for indexing from a website source.
+    MetadataSchema:
+      properties:
+        properties:
+          patternProperties:
+            ^[^\t\n\r\f\v]+$:
+              anyOf:
+              - $ref: '#/components/schemas/StringProperty'
+              - $ref: '#/components/schemas/NumberProperty'
+              - $ref: '#/components/schemas/BooleanProperty'
+              - $ref: '#/components/schemas/DateProperty'
+              - $ref: '#/components/schemas/StringListProperty'
+          propertyNames:
+            maxLength: 64
+            minLength: 1
+          type: object
+          title: Properties
+      type: object
+      required:
+      - properties
+      title: MetadataSchema
+    KnowledgeBaseResourcesResponse:
+      additionalProperties: true
+      type: object
+    KnowledgeBaseResponse:
+      properties:
+        knowledge_base_id:
+          type: string
+          format: uuid
+          title: Knowledge Base Id
+        connection_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Connection Id
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+        connection_source_ids:
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+          title: Connection Source Ids
+        website_sources:
+          items:
+            $ref: '#/components/schemas/SelectedWebsiteSource'
+          type: array
+          title: Website Sources
+        connection_provider_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Connection Provider Type
+        is_empty:
+          type: boolean
+          title: Is Empty
+          default: true
+        total_size:
+          type: integer
+          title: Total Size
+          description: Total size of all files in the knowledge base, in bytes.
+          default: 0
+        total_files:
+          type: integer
+          title: Total Files
+          description: Total number of files in the knowledge base.
+          default: 0
+        total_indexed_files:
+          type: integer
+          title: Total Indexed Files
+          description: Total number of successfully indexed files.
+          default: 0
+        total_error_files:
+          type: integer
+          title: Total Error Files
+          description: Total number of files that failed indexing.
+          default: 0
+        last_synced_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Synced At
+          description: Timestamp when the knowledge base was last successfully synced from its source
+        name:
+          type: string
+          maxLength: 2048
+          minLength: 1
+          title: Name
+          default: Unnamed Knowledge Base
+        description:
+          type: string
+          maxLength: 2048
+          title: Description
+          default: ''
+        indexing_params:
+          $ref: '#/components/schemas/KnowledgeBaseResponseIndexingParams'
+        org_id:
+          type: string
+          title: Org Id
+        role:
+          anyOf:
+          - $ref: '#/components/schemas/KnowledgeBaseRole'
+          - type: 'null'
+        org_level_role:
+          anyOf:
+          - $ref: '#/components/schemas/KnowledgeBaseRole'
+          - type: 'null'
+        user_metadata_schema:
+          anyOf:
+          - $ref: '#/components/schemas/MetadataSchema'
+          - type: 'null'
+        dataloader_metadata_schema:
+          anyOf:
+          - $ref: '#/components/schemas/MetadataSchema'
+          - type: 'null'
+      type: object
+      required:
+      - knowledge_base_id
+      - connection_id
+      - created_at
+      - updated_at
+      - connection_source_ids
+      - website_sources
+      - indexing_params
+      - org_id
+      title: KnowledgeBaseResponse
+      description: A knowledge base.
+    StringListOptionColor:
+      type: string
+      enum:
+      - red
+      - green
+      - blue
+      - yellow
+      - purple
+      - gray
+      title: StringListOptionColor
+      description: Store the different colors that can be used for the string list options.
+    ResourceUploadResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+        resource_id:
+          type: string
+          format: uuid
+          title: Resource Id
+      type: object
+      required:
+      - message
+      - resource_id
+      title: ResourceUploadResponse
+      description: Result of a file upload, including the resource ID for status polling.
+    KnowledgeBaseIndexingParamsRequest:
+      properties:
+        ocr:
+          type: boolean
+          title: Ocr
+          default: false
+        embedding_params:
+          $ref: '#/components/schemas/CreateKnowledgeBaseEmbeddingParams'
+        chunker_params:
+          $ref: '#/components/schemas/KnowledgeBaseChunkerParams'
+      type: object
+      title: KnowledgeBaseIndexingParamsRequest
+      description: Parameters that control how documents are indexed into a knowledge base.
+    Body_uploadKnowledgeBaseResource:
+      properties:
+        file:
+          type: string
+          format: binary
+          title: File
+          description: The file to upload to the knowledge base
+      type: object
+      required:
+      - file
+      title: Body_uploadKnowledgeBaseResource
+    BooleanProperty:
+      properties:
+        type:
+          type: string
+          const: boolean
+          title: Type
+          default: boolean
+        description:
+          type: string
+          maxLength: 1024
+          title: Description
+          default: ''
+        order:
+          type: integer
+          minimum: 0
+          title: Order
+          description: Display order of this property within the schema.
+          default: 0
+      type: object
+      title: BooleanProperty
+    StringListOption:
+      properties:
+        id:
+          type: string
+          title: Id
+        label:
+          type: string
+          title: Label
+        description:
+          type: string
+          maxLength: 1024
+          title: Description
+          default: ''
+        color:
+          $ref: '#/components/schemas/StringListOptionColor'
+          default: gray
+        order:
+          type: integer
+          maximum: 10000000
+          minimum: 0
+          title: Order
+          default: 0
+      type: object
+      required:
+      - label
+      title: StringListOption
+    UpdateKnowledgeBaseRequest:
+      properties:
+        connection_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Connection Id
+        connection_source_ids:
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+          title: Connection Source Ids
+        website_sources:
+          items:
+            $ref: '#/components/schemas/SelectedWebsiteSource'
+          type: array
+          title: Website Sources
+        name:
+          type: string
+          maxLength: 2048
+          minLength: 1
+          title: Name
+          default: Unnamed Knowledge Base
+        description:
+          type: string
+          maxLength: 2048
+          title: Description
+          default: ''
+        indexing_params:
+          anyOf:
+          - $ref: '#/components/schemas/KnowledgeBaseIndexingParamsRequest'
+          - type: 'null'
+        org_level_role:
+          anyOf:
+          - $ref: '#/components/schemas/KnowledgeBaseRole'
+          - type: 'null'
+      additionalProperties: false
+      type: object
+      title: UpdateKnowledgeBaseRequest
+      description: Updates to apply to an existing knowledge base.
+    ChunkerType:
+      type: string
+      enum:
+      - naive
+      - sentence
+      title: ChunkerType
+    KnowledgeBaseSyncResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+          description: Human-readable description of the started task.
+        status:
+          type: string
+          const: accepted
+          title: Status
+          description: Task status.
+          default: accepted
+      type: object
+      required:
+      - message
+      title: KnowledgeBaseSyncResponse
+      description: Result of a knowledge base sync or reindex request.
+    SelectedWebsiteSourceType:
+      type: string
+      enum:
+      - sitemap
+      - manual
+      title: SelectedWebsiteSourceType
+      description: The type of website source.
+    StringListProperty:
+      properties:
+        type:
+          type: string
+          const: string_list
+          title: Type
+          default: string_list
+        description:
+          type: string
+          maxLength: 1024
+          title: Description
+          default: ''
+        order:
+          type: integer
+          minimum: 0
+          title: Order
+          description: Display order of this property within the schema.
+          default: 0
+        options:
+          items:
+            $ref: '#/components/schemas/StringListOption'
+          type: array
+          title: Options
+      type: object
+      title: StringListProperty
+      description: A property that contains a list of strings. Can be used to store tags as well.
+    StackFileStatusEnum:
+      type: string
+      enum:
+      - resource
+      - parsed
+      - indexed
+      - pending
+      - pending_delete
+      - deleted
+      - error
+      title: StackFileStatusEnum
+      description: Processing status of a file in a knowledge base.
+    KnowledgeBaseResponseEmbeddingParams:
+      properties:
+        embedding_model:
+          type: string
+          title: Embedding Model
+        api_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Api Key
+      type: object
+      required:
+      - embedding_model
+      title: KnowledgeBaseResponseEmbeddingParams
+      description: Embedding configuration of a knowledge base.
+    StringSubtypeEnum:
+      type: string
+      enum:
+      - plain
+      - email
+      - url
+      - phone
+      - file_path
+      title: StringSubtypeEnum
+    PaginationDirection:
+      type: string
+      enum:
+      - next
+      - prev
+      title: PaginationDirection
+      description: Direction for cursor-based pagination.
+    KnowledgeBaseFileResponse:
+      properties:
+        knowledge_base_id:
+          type: string
+          format: uuid
+          title: Knowledge Base Id
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        modified_at:
+          type: string
+          format: date-time
+          title: Modified At
+        indexed_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Indexed At
+        resource_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Resource Id
+        resource_path:
+          type: string
+          minLength: 1
+          title: Resource Path
+        dataloader_metadata:
+          patternProperties:
+            ^[^\t\n\r\f\v]+$:
+              anyOf:
+              - {}
+              - type: 'null'
+          propertyNames:
+            maxLength: 64
+            minLength: 1
+          type: object
+          title: Dataloader Metadata
+        user_metadata:
+          patternProperties:
+            ^[^\t\n\r\f\v]+$:
+              anyOf:
+              - {}
+              - type: 'null'
+          propertyNames:
+            maxLength: 64
+            minLength: 1
+          type: object
+          title: User Metadata
+        content_hash:
+          type: string
+          minLength: 1
+          title: Content Hash
+        content_mime:
+          type: string
+          minLength: 1
+          title: Content Mime
+        size:
+          type: integer
+          minimum: 0
+          title: Size
+        status:
+          $ref: '#/components/schemas/StackFileStatusEnum'
+      type: object
+      required:
+      - knowledge_base_id
+      - created_at
+      - modified_at
+      - resource_id
+      - resource_path
+      - content_hash
+      - content_mime
+      - size
+      - status
+      title: KnowledgeBaseFileResponse
+      description: A file stored in a knowledge base.
+  securitySchemes:
+    OAuth2PasswordBearer:
+      type: oauth2
+      description: Authorization header. [Learn how to get it](/docs/api-reference/how-to-get-credentials).
+      flows:
+        password:
+          scopes: {}
+          tokenUrl: token
+    HTTPBearer:
+      type: http
+      scheme: bearer

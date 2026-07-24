@@ -1,0 +1,348 @@
+openapi: 3.1.0
+info:
+  title: StackAI analytics Knowledge Base Resources API
+  version: 0.1.0
+  description: StackAI public REST API for running deployed agentic workflows (flows), managing Knowledge Bases and their file resources, and reading flow-run analytics. Assembled verbatim from the per-endpoint OpenAPI 3.1.0 documents published at https://docs.stackai.com/interface-and-deployment/api-reference.
+  contact:
+    name: StackAI
+    url: https://www.stackai.com/
+servers:
+- url: https://api.stack-ai.com
+  description: Primary API host (knowledge bases, analytics, document upload)
+- url: https://stack-inference.com
+  description: Inference host for running deployed flows
+tags:
+- name: Knowledge Base Resources
+paths:
+  /v1/knowledge-bases/{knowledge_base_id}/resources:
+    get:
+      tags:
+      - Knowledge Base Resources
+      summary: List Resources
+      description: List files in the knowledge base with optional cursor pagination.
+      operationId: listKnowledgeBaseResources
+      parameters:
+      - name: knowledge_base_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Knowledge Base Id
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Optional identifier for the page that should be returned. If it is not provided, the first page will be returned.
+          title: Cursor
+        description: Optional identifier for the page that should be returned. If it is not provided, the first page will be returned.
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          description: Number of items to be returned in the page.
+          default: 50
+          title: Page Size
+        description: Number of items to be returned in the page.
+      - name: direction
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/PaginationDirection'
+          description: 'Direction for pagination: ''next'' to advance through pages (older items), ''prev'' to go back (newer items)'
+          default: next
+        description: 'Direction for pagination: ''next'' to advance through pages (older items), ''prev'' to go back (newer items)'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeBaseResourcesResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Knowledge Base Resources
+      summary: Create Resource
+      description: 'Upload a file directly to a knowledge base and start indexing.
+
+
+        This endpoint allows API users to upload files directly without needing to use
+
+        presigned URLs. The file is uploaded to storage and indexing is started automatically.
+
+        Returns the resource ID so callers can poll for indexing status.'
+      operationId: uploadKnowledgeBaseResource
+      parameters:
+      - name: knowledge_base_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Knowledge Base Id
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_uploadKnowledgeBaseResource'
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceUploadResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/knowledge-bases/{knowledge_base_id}/resources/{resource_id}:
+    get:
+      tags:
+      - Knowledge Base Resources
+      summary: Get Resource By Id
+      description: Get one file resource by ID from the knowledge base.
+      operationId: getKnowledgeBaseResource
+      parameters:
+      - name: knowledge_base_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Knowledge Base Id
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Resource Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KnowledgeBaseFileResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Knowledge Base Resources
+      summary: Delete Resource By Id
+      description: Delete a file resource by ID.
+      operationId: deleteKnowledgeBaseResource
+      parameters:
+      - name: knowledge_base_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Knowledge Base Id
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Resource Id
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    KnowledgeBaseResourcesResponse:
+      additionalProperties: true
+      type: object
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    StackFileStatusEnum:
+      type: string
+      enum:
+      - resource
+      - parsed
+      - indexed
+      - pending
+      - pending_delete
+      - deleted
+      - error
+      title: StackFileStatusEnum
+      description: Processing status of a file in a knowledge base.
+    PaginationDirection:
+      type: string
+      enum:
+      - next
+      - prev
+      title: PaginationDirection
+      description: Direction for cursor-based pagination.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ResourceUploadResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+        resource_id:
+          type: string
+          format: uuid
+          title: Resource Id
+      type: object
+      required:
+      - message
+      - resource_id
+      title: ResourceUploadResponse
+      description: Result of a file upload, including the resource ID for status polling.
+    Body_uploadKnowledgeBaseResource:
+      properties:
+        file:
+          type: string
+          format: binary
+          title: File
+          description: The file to upload to the knowledge base
+      type: object
+      required:
+      - file
+      title: Body_uploadKnowledgeBaseResource
+    KnowledgeBaseFileResponse:
+      properties:
+        knowledge_base_id:
+          type: string
+          format: uuid
+          title: Knowledge Base Id
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        modified_at:
+          type: string
+          format: date-time
+          title: Modified At
+        indexed_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Indexed At
+        resource_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Resource Id
+        resource_path:
+          type: string
+          minLength: 1
+          title: Resource Path
+        dataloader_metadata:
+          patternProperties:
+            ^[^\t\n\r\f\v]+$:
+              anyOf:
+              - {}
+              - type: 'null'
+          propertyNames:
+            maxLength: 64
+            minLength: 1
+          type: object
+          title: Dataloader Metadata
+        user_metadata:
+          patternProperties:
+            ^[^\t\n\r\f\v]+$:
+              anyOf:
+              - {}
+              - type: 'null'
+          propertyNames:
+            maxLength: 64
+            minLength: 1
+          type: object
+          title: User Metadata
+        content_hash:
+          type: string
+          minLength: 1
+          title: Content Hash
+        content_mime:
+          type: string
+          minLength: 1
+          title: Content Mime
+        size:
+          type: integer
+          minimum: 0
+          title: Size
+        status:
+          $ref: '#/components/schemas/StackFileStatusEnum'
+      type: object
+      required:
+      - knowledge_base_id
+      - created_at
+      - modified_at
+      - resource_id
+      - resource_path
+      - content_hash
+      - content_mime
+      - size
+      - status
+      title: KnowledgeBaseFileResponse
+      description: A file stored in a knowledge base.
+  securitySchemes:
+    OAuth2PasswordBearer:
+      type: oauth2
+      description: Authorization header. [Learn how to get it](/docs/api-reference/how-to-get-credentials).
+      flows:
+        password:
+          scopes: {}
+          tokenUrl: token
+    HTTPBearer:
+      type: http
+      scheme: bearer

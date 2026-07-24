@@ -1,0 +1,513 @@
+openapi: 3.1.0
+info:
+  title: StackAI analytics API
+  version: 0.1.0
+  description: StackAI public REST API for running deployed agentic workflows (flows), managing Knowledge Bases and their file resources, and reading flow-run analytics. Assembled verbatim from the per-endpoint OpenAPI 3.1.0 documents published at https://docs.stackai.com/interface-and-deployment/api-reference.
+  contact:
+    name: StackAI
+    url: https://www.stackai.com/
+servers:
+- url: https://api.stack-ai.com
+  description: Primary API host (knowledge bases, analytics, document upload)
+- url: https://stack-inference.com
+  description: Inference host for running deployed flows
+tags:
+- name: analytics
+paths:
+  /analytics/org/{org_id}/flows/{flow_id}:
+    get:
+      tags:
+      - analytics
+      summary: List Flow Runs
+      description: List flow run logs matching the given filters.
+      operationId: getAnalyticsDataApi
+      parameters:
+      - name: flow_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Flow Id
+      - name: org_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Org Id
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 25
+          title: Page Size
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Start Date
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: End Date
+      - name: user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+      - name: state
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Comma-separated list of statuses to filter by. Accepted values: PENDING, PAUSED, RESUMED, COMPLETED, FAILED, CANCELLED'
+          title: State
+        description: 'Comma-separated list of statuses to filter by. Accepted values: PENDING, PAUSED, RESUMED, COMPLETED, FAILED, CANCELLED'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectRunSummary'
+                title: Response Getanalyticsdataapi
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /organizations/analytics/projects-run-summary:
+    get:
+      tags:
+      - analytics
+      summary: List Project Run Summary
+      description: Org-level analytics for all projects. List with the project run logs matching the given filters.
+      operationId: get_org_analytics_data_api_organizations_analytics_projects_run_summary_get
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 25
+          title: Page Size
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Start Date
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: End Date
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrgProjectRunSummary'
+                title: Response Get Org Analytics Data Api Across All Projects Organizations  Analytics Projects Run Summary Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    OrgProjectRunSummary:
+      properties:
+        project_id:
+          type: string
+          title: Project Id
+        project_owner:
+          type: object
+          properties:
+            user_id:
+              type: string
+              title: User Id
+            email:
+              type: string
+              title: Email
+            avatar_url:
+              type: string
+              format: uri
+              title: Avatar Url
+          required:
+          - user_id
+          - email
+          - avatar_url
+          title: Project Owner
+        project_type:
+          type: string
+          title: Project Type
+        project_name:
+          type: string
+          title: Project Name
+        total_runs:
+          type: integer
+          title: Total Runs
+        total_errors:
+          type: integer
+          title: Total Errors
+        total_tokens:
+          type: integer
+          title: Total Tokens
+        total_users:
+          type: integer
+          title: Total Users
+        is_published:
+          type: boolean
+          title: Is Published
+        public_ui_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Public Ui Url
+        public_ui_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Public Ui Type
+      type: object
+      required:
+      - project_id
+      - project_owner
+      - project_type
+      - project_name
+      - total_runs
+      - total_errors
+      - total_tokens
+      - total_users
+      - is_published
+      - public_ui_url
+      - public_ui_type
+      title: OrgProjectRunSummary
+      description: A row with information about project run summary at the organization level.
+    LLMUsageData:
+      properties:
+        provider:
+          $ref: '#/components/schemas/LLMProviderEnum'
+        model_id:
+          type: string
+          title: Model Id
+        tokens:
+          anyOf:
+          - type: integer
+            minimum: 0
+          - type: 'null'
+          title: Tokens
+        input_tokens:
+          anyOf:
+          - type: integer
+            minimum: 0
+          - type: 'null'
+          title: Input Tokens
+        output_tokens:
+          anyOf:
+          - type: integer
+            minimum: 0
+          - type: 'null'
+          title: Output Tokens
+        connection_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Connection Id
+        connection_origin:
+          anyOf:
+          - $ref: '#/components/schemas/LLMConnectionOrigin'
+          - type: 'null'
+        is_local_model:
+          type: boolean
+          title: Is Local Model
+          description: Whether this usage record is from a local model.
+          readOnly: true
+        should_charge:
+          type: boolean
+          title: Should Charge
+          description: Whether this usage record should be charged.
+          readOnly: true
+      type: object
+      required:
+      - provider
+      - model_id
+      - is_local_model
+      - should_charge
+      title: LLMUsageData
+      description: Token usage for a single LLM call within a run.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    RanByType:
+      type: string
+      enum:
+      - user
+      - personal_api_key
+      - org_api_key
+      - system
+      title: RanByType
+      description: Who or what authenticated the run.
+    ProjectRunSummary:
+      properties:
+        run_id:
+          type: string
+          format: uuid
+          title: Run Id
+        conversation_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Conversation Id
+        date:
+          type: string
+          format: date-time
+          title: Date
+        is_flow_successful:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Flow Successful
+        state:
+          anyOf:
+          - $ref: '#/components/schemas/WorkflowState'
+          - type: 'null'
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+        latency:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Latency
+        total_tokens:
+          type: integer
+          title: Total Tokens
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        inputs:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Inputs
+        outputs:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Outputs
+        llms:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Llms
+        feedback:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feedback
+        llm_usage:
+          items:
+            $ref: '#/components/schemas/LLMUsageData'
+          type: array
+          title: Llm Usage
+        run_type:
+          anyOf:
+          - $ref: '#/components/schemas/RunType'
+          - type: 'null'
+          description: How the run was initiated.
+        ran_by_type:
+          anyOf:
+          - $ref: '#/components/schemas/RanByType'
+          - type: 'null'
+          description: Who authenticated the run.
+        ran_by_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Ran By Id
+          description: ID of the user or API key that triggered the run.
+        ran_by_display_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ran By Display Name
+          description: Display name of the user (email) or API key (name) that triggered the run.
+        parent_run_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Parent Run Id
+          description: Run ID of the parent workflow for sub-workflow runs.
+        parent_project_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parent Project Id
+          description: Project ID of the parent workflow for sub-workflow runs.
+        parent_project_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parent Project Name
+          description: Name of the parent project for sub-workflow runs.
+      type: object
+      required:
+      - run_id
+      - date
+      - is_flow_successful
+      - state
+      - error
+      - latency
+      - total_tokens
+      - user_id
+      - inputs
+      - outputs
+      - llms
+      - feedback
+      title: ProjectRunSummary
+      description: Summary of a single workflow run.
+    RunType:
+      type: string
+      enum:
+      - workflow_builder
+      - form
+      - batch
+      - chat_assistant
+      - agent_assistant
+      - trigger
+      - scheduled
+      - sub_workflow
+      - api
+      title: RunType
+      description: How a workflow run was initiated.
+    WorkflowState:
+      type: string
+      enum:
+      - PENDING
+      - PAUSED
+      - RESUMED
+      - COMPLETED
+      - FAILED
+      - CANCELLED
+      title: WorkflowState
+      description: Enum representing the possible states of a workflow.
+    LLMConnectionOrigin:
+      type: string
+      enum:
+      - stack_ai
+      - external_db
+      - external_ephemeral
+      title: LLMConnectionOrigin
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    LLMProviderEnum:
+      type: string
+      enum:
+      - Anthropic
+      - Azure
+      - Bedrock
+      - Cerebras
+      - Google
+      - Google_service_account
+      - Groq
+      - Local
+      - Meta
+      - Mistral
+      - OpenAI
+      - Perplexity
+      - Replicate
+      - TogetherAI
+      - XAI
+      title: LLMProviderEnum
+      description: LLM provider identifiers.
+  securitySchemes:
+    OAuth2PasswordBearer:
+      type: oauth2
+      description: Authorization header. [Learn how to get it](/docs/api-reference/how-to-get-credentials).
+      flows:
+        password:
+          scopes: {}
+          tokenUrl: token
+    HTTPBearer:
+      type: http
+      scheme: bearer

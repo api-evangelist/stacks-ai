@@ -1,0 +1,120 @@
+openapi: 3.1.0
+info:
+  title: StackAI analytics Run Flow API
+  version: 0.1.0
+  description: StackAI public REST API for running deployed agentic workflows (flows), managing Knowledge Bases and their file resources, and reading flow-run analytics. Assembled verbatim from the per-endpoint OpenAPI 3.1.0 documents published at https://docs.stackai.com/interface-and-deployment/api-reference.
+  contact:
+    name: StackAI
+    url: https://www.stackai.com/
+servers:
+- url: https://api.stack-ai.com
+  description: Primary API host (knowledge bases, analytics, document upload)
+- url: https://stack-inference.com
+  description: Inference host for running deployed flows
+tags:
+- name: Run Flow
+paths:
+  /inference/v0/run/{org_id}/{flow_id}:
+    post:
+      tags:
+      - Run Flow
+      summary: Run Deployed Flow
+      description: Run a flow and get the result.
+      operationId: runDeployedFlow
+      parameters:
+      - name: org_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Org Id
+      - name: flow_id
+        in: path
+        required: true
+        schema:
+          type: string
+          description: The flow ID. [Learn how to get it](/docs/api-reference/how-to-get-flow-id).
+          title: Flow Id
+        description: The flow ID. [Learn how to get it](/docs/api-reference/how-to-get-flow-id).
+      - name: version
+        in: query
+        required: false
+        schema:
+          type: integer
+          description: Version of the flow
+          default: -1
+          title: Version
+        description: Version of the flow
+      - name: verbose
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Return the full model
+          default: true
+          title: Verbose
+        description: Return the full model
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+              description: Input parameters for the flow
+              title: Inputs
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    OAuth2PasswordBearer:
+      type: oauth2
+      description: Authorization header. [Learn how to get it](/docs/api-reference/how-to-get-credentials).
+      flows:
+        password:
+          scopes: {}
+          tokenUrl: token
+    HTTPBearer:
+      type: http
+      scheme: bearer
