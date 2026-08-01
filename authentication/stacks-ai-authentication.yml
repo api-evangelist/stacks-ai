@@ -1,0 +1,41 @@
+generated: '2026-07-21'
+method: searched
+source: openapi/stacks-ai-openapi-original.yml
+docs: https://docs.stackai.com/interface-and-deployment/end-user-interfaces/api
+summary:
+  types:
+  - http
+  - oauth2
+  oauth2_flows:
+  - password
+  notes: >-
+    Deployed-flow and document-upload endpoints authenticate with a Bearer public API key (the
+    organization token), passed in the Authorization header. API keys are generated in the StackAI
+    console under Settings -> API Keys and can be personal or organization scoped. Some management and
+    analytics endpoints declare an OAuth2 password-grant token scheme (tokenUrl "token"). No scopes are
+    defined on the OAuth2 flow.
+schemes:
+- name: HTTPBearer
+  type: http
+  scheme: bearer
+  description: >-
+    Bearer API key (organization / personal token) in the Authorization header, e.g.
+    `Authorization: Bearer <YOUR_API_KEY>`. Generated in Settings -> API Keys.
+  applies_to:
+  - Knowledge Bases
+  - Document upload
+  - Run deployed flow
+  sources:
+  - openapi/stacks-ai-openapi-original.yml
+- name: OAuth2PasswordBearer
+  type: oauth2
+  flows:
+  - flow: password
+    tokenUrl: token
+    scopes: 0
+  description: Authorization header. OAuth2 password-grant token scheme (no scopes declared).
+  applies_to:
+  - Run deployed flow
+  - Analytics
+  sources:
+  - openapi/stacks-ai-openapi-original.yml

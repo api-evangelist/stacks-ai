@@ -1,0 +1,36 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/stacks-ai-openapi-original.yml
+format: fastapi-validation
+problem_json: false
+envelope:
+  detail:
+  - loc: ["<location path>"]
+    msg: "<human message>"
+    type: "<error type>"
+notes: >-
+  Derived from the documented OpenAPI 3.1.0 responses. Every StackAI API operation declares a 422
+  Validation Error using the FastAPI HTTPValidationError schema; success responses vary by operation
+  (200/201/202/204). No RFC 9457 application/problem+json types are published.
+problems:
+- status: 422
+  title: Validation Error
+  schema: HTTPValidationError
+  media_type: application/json
+  description: >-
+    Request failed schema/parameter validation. `detail[]` lists each offending field with its location
+    (`loc`), a message (`msg`), and an error `type`.
+  source_operations:
+  - runDeployedFlow
+  - listKnowledgeBases
+  - createKnowledgeBase
+  - getKnowledgeBase
+  - updateKnowledgeBase
+  - deleteKnowledgeBase
+  - listKnowledgeBaseResources
+  - uploadKnowledgeBaseResource
+  - getKnowledgeBaseResource
+  - deleteKnowledgeBaseResource
+  - syncKnowledgeBase
+  - getAnalyticsDataApi
+  - get_org_analytics_data_api_organizations_analytics_projects_run_summary_get

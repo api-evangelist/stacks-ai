@@ -1,0 +1,22 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for StackAI API
+  version: 1.0.0
+extends: openapi/stacks-ai-openapi-original.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enriched: '2026-07-21'
+    x-apievangelist-source: https://docs.stackai.com/interface-and-deployment/api-reference
+    x-apievangelist-notes: >-
+      Spec assembled verbatim from StackAI's per-endpoint OpenAPI 3.1.0 documents. Enhancements captured
+      as an overlay so the harvested original is never mutated.
+- target: $.info
+  update:
+    x-artifact-links:
+      authentication: authentication/stacks-ai-authentication.yml
+      conventions: conventions/stacks-ai-conventions.yml
+      errors: errors/stacks-ai-problem-types.yml
+      data-model: data-model/stacks-ai-data-model.yml
+      lifecycle: lifecycle/stacks-ai-lifecycle.yml
+      conformance: conformance/stacks-ai-conformance.yml

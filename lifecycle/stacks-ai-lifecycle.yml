@@ -1,0 +1,23 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.stackai.com/interface-and-deployment/api-reference
+versioning:
+  scheme: uri-path
+  current:
+  - v1     # knowledge bases, analytics
+  - v0     # /inference/v0 run deployed flow
+  docs: https://docs.stackai.com/interface-and-deployment/api-reference
+deprecation:
+  policy_url: null
+  sunset_header: false
+  notes: No formal deprecation policy or RFC 8594 Sunset/Deprecation header support is documented.
+sla:
+  url: null
+  uptime_target: null
+status_page: https://status.stack-ai.com/
+status_page_alt: https://stack-ai.instatus.com/
+deprecated_operations: []
+notes: >-
+  StackAI publishes a public status page (Instatus). Versioning is carried in the URI path (v1 for
+  knowledge-base and analytics endpoints, v0 for the inference/run surface). No published deprecation
+  policy or SLA document was found.

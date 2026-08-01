@@ -1,0 +1,61 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.stackai.com/interface-and-deployment/api-reference
+derived_from: openapi/stacks-ai-openapi-original.yml
+authentication:
+  style: bearer-api-key
+  header: Authorization
+  format: "Bearer <API_KEY>"
+  also: oauth2 password-grant token scheme on some endpoints
+  docs: https://docs.stackai.com/interface-and-deployment/end-user-interfaces/api
+  cross_ref: authentication/stacks-ai-authentication.yml
+idempotency:
+  supported: false
+  notes: >-
+    StackAI does not document an idempotency-key header or parameter on write operations. Knowledge-base
+    mutations and flow runs are not advertised as idempotent.
+pagination:
+  styles:
+  - style: cursor
+    applies_to: [listKnowledgeBases, listKnowledgeBaseResources]
+    params: [cursor, page_size, direction]
+    direction_values: [next, prev]
+    page_size_max: 1000  # 100 on resources listing, 1000 on knowledge-base listing
+    notes: >-
+      Cursor-based; `direction: next` advances to older items, `prev` returns to newer items. `cursor`
+      omitted returns the first page.
+  - style: offset
+    applies_to: [getAnalyticsDataApi, listProjectRunSummary]
+    params: [page, page_size]
+    notes: Zero-indexed `page` with `page_size` (default 25) on analytics endpoints.
+versioning:
+  scheme: uri-path
+  values:
+  - /v1/   # knowledge bases
+  - /inference/v0/   # run deployed flow
+  cross_ref: lifecycle/stacks-ai-lifecycle.yml
+error_envelope:
+  format: fastapi-validation
+  problem_json: false
+  shape:
+    detail:
+    - loc: ["<location>"]
+      msg: "<message>"
+      type: "<error type>"
+  validation_status: 422
+  cross_ref: errors/stacks-ai-problem-types.yml
+  notes: >-
+    Errors use the FastAPI validation envelope (`{"detail": [{"loc","msg","type"}]}`) rather than
+    RFC 9457 application/problem+json.
+rate_limiting:
+  documented_headers: false
+  notes: >-
+    The deployed-flow API is described as auto-scaling for high request volume; no rate-limit response
+    headers or quotas are documented in the public API reference.
+request_tracing:
+  request_id_header: null
+  run_identifiers: [run_id, conversation_id, parent_run_id]
+  notes: >-
+    Flow runs are tracked by `run_id` and `conversation_id` (and `parent_run_id` for sub-workflows),
+    surfaced through the analytics endpoints rather than a per-request tracing header.
+content_type: application/json

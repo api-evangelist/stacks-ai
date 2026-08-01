@@ -1,0 +1,52 @@
+generated: '2026-07-21'
+method: derived
+status: candidate
+source: openapi/stacks-ai-openapi-original.yml
+notes: >-
+  No official hosted/remote StackAI MCP server was found in the docs, npm, or public MCP registries as of
+  the generation date. This is a candidate tool list derived one-to-one from the documented OpenAPI
+  operations so an MCP proxy could expose the StackAI API. Auth: Bearer API key (see authentication/).
+server:
+  name: stacks-ai
+  transport: http
+  url: null
+tools:
+- name: run_deployed_flow
+  description: Run a deployed flow (agentic workflow) and get the result.
+  source_operation: openapi/stacks-ai-openapi-original.yml#runDeployedFlow
+- name: list_knowledge_bases
+  description: List all available knowledge bases.
+  source_operation: openapi/stacks-ai-openapi-original.yml#listKnowledgeBases
+- name: create_knowledge_base
+  description: Create a new knowledge base.
+  source_operation: openapi/stacks-ai-openapi-original.yml#createKnowledgeBase
+- name: get_knowledge_base
+  description: Get a knowledge base by ID.
+  source_operation: openapi/stacks-ai-openapi-original.yml#getKnowledgeBase
+- name: update_knowledge_base
+  description: Update a knowledge base.
+  source_operation: openapi/stacks-ai-openapi-original.yml#updateKnowledgeBase
+- name: delete_knowledge_base
+  description: Delete a knowledge base by ID.
+  source_operation: openapi/stacks-ai-openapi-original.yml#deleteKnowledgeBase
+- name: sync_knowledge_base
+  description: Synchronize / reindex a knowledge base.
+  source_operation: openapi/stacks-ai-openapi-original.yml#syncKnowledgeBase
+- name: list_knowledge_base_resources
+  description: List files in a knowledge base with cursor pagination.
+  source_operation: openapi/stacks-ai-openapi-original.yml#listKnowledgeBaseResources
+- name: upload_knowledge_base_resource
+  description: Upload a file to a knowledge base and start indexing.
+  source_operation: openapi/stacks-ai-openapi-original.yml#uploadKnowledgeBaseResource
+- name: get_knowledge_base_resource
+  description: Get one file resource by ID from a knowledge base.
+  source_operation: openapi/stacks-ai-openapi-original.yml#getKnowledgeBaseResource
+- name: delete_knowledge_base_resource
+  description: Delete a file resource by ID.
+  source_operation: openapi/stacks-ai-openapi-original.yml#deleteKnowledgeBaseResource
+- name: list_flow_runs
+  description: List flow-run logs for a flow, with filters.
+  source_operation: openapi/stacks-ai-openapi-original.yml#getAnalyticsDataApi
+- name: list_project_run_summary
+  description: Org-level analytics summary across all projects.
+  source_operation: openapi/stacks-ai-openapi-original.yml#get_org_analytics_data_api_organizations_analytics_projects_run_summary_get

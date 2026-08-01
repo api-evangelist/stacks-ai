@@ -1,0 +1,11 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/stacks-ai-openapi-original.yml
+schemes:
+- name: OAuth2PasswordBearer
+  source: openapi/stacks-ai-openapi-original.yml
+  flows:
+  - flow: password
+    tokenUrl: token
+  description: Authorization header. [Learn how to get it](/docs/api-reference/how-to-get-credentials).
+scopes: []

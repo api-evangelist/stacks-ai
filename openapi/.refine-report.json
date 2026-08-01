@@ -1,0 +1,22 @@
+{
+  "provider": "stacks-ai",
+  "sources": [
+    "stacks-ai-analytics-api-openapi.yml",
+    "stacks-ai-knowledge-base-resources-api-openapi.yml",
+    "stacks-ai-knowledge-base-sync-api-openapi.yml",
+    "stacks-ai-knowledge-bases-api-openapi.yml",
+    "stacks-ai-run-flow-api-openapi.yml"
+  ],
+  "outputs": [
+    "stacks-ai-analytics-api-openapi.yml",
+    "stacks-ai-knowledge-base-resources-api-openapi.yml",
+    "stacks-ai-knowledge-base-sync-api-openapi.yml",
+    "stacks-ai-knowledge-bases-api-openapi.yml",
+    "stacks-ai-run-flow-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

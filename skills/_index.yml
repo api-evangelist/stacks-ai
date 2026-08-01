@@ -1,0 +1,16 @@
+generated: '2026-07-21'
+method: generated
+source: openapi/stacks-ai-openapi-original.yml
+skills:
+- file: stacks-ai-run-deployed-flow.md
+  name: Run a deployed StackAI flow
+  api: openapi/stacks-ai-openapi-original.yml
+  operations: [runDeployedFlow, getAnalyticsDataApi]
+- file: stacks-ai-build-knowledge-base.md
+  name: Build and populate a StackAI knowledge base
+  api: openapi/stacks-ai-openapi-original.yml
+  operations: [createKnowledgeBase, uploadKnowledgeBaseResource, syncKnowledgeBase, listKnowledgeBaseResources, getKnowledgeBaseResource]
+- file: stacks-ai-monitor-flow-runs.md
+  name: Monitor StackAI flow-run analytics
+  api: openapi/stacks-ai-openapi-original.yml
+  operations: [getAnalyticsDataApi, get_org_analytics_data_api_organizations_analytics_projects_run_summary_get]

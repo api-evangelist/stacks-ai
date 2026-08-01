@@ -1,0 +1,63 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/stacks-ai-openapi-original.yml
+entities:
+- name: Organization
+  id_field: org_id
+  description: Top-level tenant that owns flows, knowledge bases, and API keys.
+- name: Flow
+  id_field: flow_id
+  aka: [project, workflow]
+  description: A deployed agentic workflow that can be run via the inference API.
+- name: KnowledgeBase
+  id_field: knowledge_base_id
+  id_format: uuid
+  description: A collection of indexed file resources used for retrieval in flows.
+- name: Resource
+  id_field: resource_id
+  id_format: uuid
+  aka: [file]
+  description: A file uploaded to and indexed within a knowledge base.
+- name: Connection
+  id_field: connection_id
+  id_format: uuid
+  description: An external data-source connection backing a knowledge base.
+- name: FlowRun
+  id_field: run_id
+  id_format: uuid
+  aka: [ProjectRunSummary]
+  description: A single execution of a flow, with latency, token usage, and state.
+relationships:
+- from: KnowledgeBase
+  to: Organization
+  type: belongs_to
+  via: org_id
+- from: KnowledgeBase
+  to: Connection
+  type: has_one
+  via: connection_id
+- from: Resource
+  to: KnowledgeBase
+  type: belongs_to
+  via: knowledge_base_id
+- from: KnowledgeBase
+  to: Resource
+  type: has_many
+  via: knowledge_base_id
+- from: Flow
+  to: Organization
+  type: belongs_to
+  via: org_id
+- from: FlowRun
+  to: Flow
+  type: belongs_to
+  via: flow_id
+- from: FlowRun
+  to: Organization
+  type: belongs_to
+  via: org_id
+- from: FlowRun
+  to: FlowRun
+  type: belongs_to
+  via: parent_run_id
+  note: Sub-workflow runs reference their parent run.
