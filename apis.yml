@@ -169,6 +169,12 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: AgentSkill
+  url: skills/stacks-ai-build-knowledge-base.md
+- type: MCPServer
+  url: mcp/stacks-ai-mcp.yml
+- type: Overlay
+  url: overlays/stacks-ai-openapi-overlay.yaml
 - type: TrustCenter
   url: security/stacks-ai-trust-center.yml
 - type: DomainSecurity
