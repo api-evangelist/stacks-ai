@@ -1,0 +1,442 @@
+{
+  "item": [
+    {
+      "id": "561270d3-d3f5-4547-bdb9-65c51d2c7f61",
+      "name": "analytics",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f3b0409e-147d-40b0-b792-ef415ba3c748",
+          "name": "List Flow Runs",
+          "request": {
+            "name": "List Flow Runs",
+            "description": {
+              "content": "List flow run logs matching the given filters.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "analytics",
+                "org",
+                ":org_id",
+                "flows",
+                ":flow_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "25"
+                },
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<dateTime>"
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<dateTime>"
+                },
+                {
+                  "disabled": false,
+                  "key": "user_id",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "state",
+                  "value": "<string>",
+                  "description": "Comma-separated list of statuses to filter by. Accepted values: PENDING, PAUSED, RESUMED, COMPLETED, FAILED, CANCELLED"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "flow_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "org_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3e251ad4-2d3b-4a34-8edc-e772cedf2f12",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analytics",
+                    "org",
+                    ":org_id",
+                    "flows",
+                    ":flow_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "25"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "user_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "state",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "flow_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"run_id\": \"af5a962d-2607-5ff3-d9db-d057ea135db5\",\n    \"date\": \"1987-03-01T19:32:44.111Z\",\n    \"is_flow_successful\": false,\n    \"state\": \"RESUMED\",\n    \"error\": \"string\",\n    \"latency\": 1655.7532548387699,\n    \"total_tokens\": 3503,\n    \"user_id\": \"string\",\n    \"inputs\": \"string\",\n    \"outputs\": \"string\",\n    \"llms\": \"string\",\n    \"feedback\": \"string\",\n    \"conversation_id\": \"string\",\n    \"llm_usage\": [\n      {\n        \"provider\": \"Anthropic\",\n        \"model_id\": \"string\",\n        \"is_local_model\": true,\n        \"should_charge\": true,\n        \"tokens\": 4700,\n        \"input_tokens\": 6389,\n        \"output_tokens\": 7160,\n        \"connection_id\": \"fa93db51-b891-a0db-22bd-6c3c3fbf58d3\",\n        \"connection_origin\": \"external_ephemeral\"\n      },\n      {\n        \"provider\": \"Anthropic\",\n        \"model_id\": \"string\",\n        \"is_local_model\": false,\n        \"should_charge\": false,\n        \"tokens\": 5204,\n        \"input_tokens\": 2962,\n        \"output_tokens\": 3610,\n        \"connection_id\": \"16a0d5e8-b528-13e6-c217-cdd51e894d1b\",\n        \"connection_origin\": \"external_ephemeral\"\n      }\n    ],\n    \"run_type\": \"workflow_builder\",\n    \"ran_by_type\": \"personal_api_key\",\n    \"ran_by_id\": \"2222268f-958c-06d8-183a-1688ff81859c\",\n    \"ran_by_display_name\": \"string\",\n    \"parent_run_id\": \"eeb6ae28-a460-f329-44e2-5a6e57b851c2\",\n    \"parent_project_id\": \"string\",\n    \"parent_project_name\": \"string\"\n  },\n  {\n    \"run_id\": \"0ba63b5c-e395-bc53-a34f-86f991c69f4d\",\n    \"date\": \"1955-11-23T10:00:36.380Z\",\n    \"is_flow_successful\": false,\n    \"state\": \"COMPLETED\",\n    \"error\": \"string\",\n    \"latency\": 2372.289559461842,\n    \"total_tokens\": 8733,\n    \"user_id\": \"string\",\n    \"inputs\": \"string\",\n    \"outputs\": \"string\",\n    \"llms\": \"string\",\n    \"feedback\": \"string\",\n    \"conversation_id\": \"string\",\n    \"llm_usage\": [\n      {\n        \"provider\": \"Cerebras\",\n        \"model_id\": \"string\",\n        \"is_local_model\": false,\n        \"should_charge\": true,\n        \"tokens\": 5607,\n        \"input_tokens\": 7160,\n        \"output_tokens\": 322,\n        \"connection_id\": \"aaf9a4ea-f28c-f0f6-92c8-15f90ca7d0fa\",\n        \"connection_origin\": \"external_db\"\n      },\n      {\n        \"provider\": \"Meta\",\n        \"model_id\": \"string\",\n        \"is_local_model\": true,\n        \"should_charge\": false,\n        \"tokens\": 3435,\n        \"input_tokens\": 2284,\n        \"output_tokens\": 7464,\n        \"connection_id\": \"8950a1bc-4c83-7210-f16d-39253804be4a\",\n        \"connection_origin\": \"stack_ai\"\n      }\n    ],\n    \"run_type\": \"sub_workflow\",\n    \"ran_by_type\": \"personal_api_key\",\n    \"ran_by_id\": \"8b81d0d5-acd4-bf9a-c38d-cc75e20bdc80\",\n    \"ran_by_display_name\": \"string\",\n    \"parent_run_id\": \"464d4b12-6203-d6e4-e853-8d5c58d7d24d\",\n    \"parent_project_id\": \"string\",\n    \"parent_project_name\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "84088b28-74df-43e1-b394-6fccb8190d9c",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "analytics",
+                    "org",
+                    ":org_id",
+                    "flows",
+                    ":flow_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "25"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "user_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "state",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "flow_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0b4fb0d6-7d98-4e80-9d16-1830e95979e2",
+          "name": "List Project Run Summary",
+          "request": {
+            "name": "List Project Run Summary",
+            "description": {
+              "content": "Org-level analytics for all projects. List with the project run logs matching the given filters.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "organizations",
+                "analytics",
+                "projects-run-summary"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "0"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "25"
+                },
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<dateTime>"
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<dateTime>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ae5aa9db-ba12-408a-9bd4-f8c89073b472",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    "analytics",
+                    "projects-run-summary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "25"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<dateTime>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"project_id\": \"string\",\n    \"project_owner\": {\n      \"user_id\": \"string\",\n      \"email\": \"string\",\n      \"avatar_url\": \"https://scDDy.rinlVPRJw,7E7LDAsohGFATqd0i4f,aevaD8Arm8,yk5xtPVDP,K++k3FhfjI+vKhe1\"\n    },\n    \"project_type\": \"string\",\n    \"project_name\": \"string\",\n    \"total_runs\": 4595,\n    \"total_errors\": 8882,\n    \"total_tokens\": 2974,\n    \"total_users\": 7401,\n    \"is_published\": false,\n    \"public_ui_url\": \"string\",\n    \"public_ui_type\": \"string\"\n  },\n  {\n    \"project_id\": \"string\",\n    \"project_owner\": {\n      \"user_id\": \"string\",\n      \"email\": \"string\",\n      \"avatar_url\": \"https://MbtmfFZvObIOxikkfczZdijruec.tsjrLYsjz169Xts0K2Gr4f0eGQl2KOhYU1HXi5,F-rNxewt6sF5YCOmBV\"\n    },\n    \"project_type\": \"string\",\n    \"project_name\": \"string\",\n    \"total_runs\": 6931,\n    \"total_errors\": 5226,\n    \"total_tokens\": 1771,\n    \"total_users\": 1406,\n    \"is_published\": false,\n    \"public_ui_url\": \"string\",\n    \"public_ui_type\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9ed97ffb-35d7-4a57-9472-dbecb7afd9ee",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "organizations",
+                    "analytics",
+                    "projects-run-summary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "0"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "25"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<dateTime>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.stack-ai.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "abe4dff6-6bd1-4150-9947-d6fb660d5b68",
+    "name": "StackAI analytics API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "StackAI public REST API for running deployed agentic workflows (flows), managing Knowledge Bases and their file resources, and reading flow-run analytics. Assembled verbatim from the per-endpoint OpenAPI 3.1.0 documents published at https://docs.stackai.com/interface-and-deployment/api-reference.\n\nContact Support:\n Name: StackAI",
+      "type": "text/plain"
+    }
+  }
+}

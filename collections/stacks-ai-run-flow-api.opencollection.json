@@ -1,0 +1,58 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "StackAI analytics Run Flow API",
+    "version": "0.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Run Flow",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Run Deployed Flow",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stack-ai.com/inference/v0/run/:org_id/:flow_id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "flow_id",
+                "value": "",
+                "type": "path",
+                "description": "The flow ID. [Learn how to get it](/docs/api-reference/how-to-get-flow-id)."
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query",
+                "description": "Version of the flow"
+              },
+              {
+                "name": "verbose",
+                "value": "",
+                "type": "query",
+                "description": "Return the full model"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Run a flow and get the result."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

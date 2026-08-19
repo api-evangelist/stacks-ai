@@ -2,10 +2,9 @@ generated: '2026-07-21'
 method: derived
 status: candidate
 source: openapi/stacks-ai-openapi-original.yml
-notes: >-
-  No official hosted/remote StackAI MCP server was found in the docs, npm, or public MCP registries as of
-  the generation date. This is a candidate tool list derived one-to-one from the documented OpenAPI
-  operations so an MCP proxy could expose the StackAI API. Auth: Bearer API key (see authentication/).
+notes: 'No official hosted/remote StackAI MCP server was found in the docs, npm, or public MCP registries
+  as of the generation date. This is a candidate tool list derived one-to-one from the documented OpenAPI
+  operations so an MCP proxy could expose the StackAI API. Auth: Bearer API key (see authentication/).'
 server:
   name: stacks-ai
   transport: http
@@ -50,3 +49,9 @@ tools:
 - name: list_project_run_summary
   description: Org-level analytics summary across all projects.
   source_operation: openapi/stacks-ai-openapi-original.yml#get_org_analytics_data_api_organizations_analytics_projects_run_summary_get
+deployment:
+  mode: none
+  verified: derived
+  tools: 13
+  checked: '2026-08-12'
+  source: catalog MCP census

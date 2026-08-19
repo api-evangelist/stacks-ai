@@ -1,0 +1,36 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "StackAI analytics Knowledge Base Sync API",
+    "version": "0.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Knowledge Base Sync",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Synchronize Knowledge Base",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stack-ai.com/v1/knowledge-bases/:knowledge_base_id/sync",
+            "params": [
+              {
+                "name": "knowledge_base_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Synchronize the knowledge base."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

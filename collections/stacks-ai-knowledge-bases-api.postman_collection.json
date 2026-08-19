@@ -1,0 +1,1567 @@
+{
+  "item": [
+    {
+      "id": "22bde065-6ac7-4f3b-8770-a4b374bf3b6f",
+      "name": "Knowledge Bases",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1ae98c26-7721-4b6f-9e22-1e261fb24cbf",
+          "name": "List Resources",
+          "request": {
+            "name": "List Resources",
+            "description": {
+              "content": "List files in the knowledge base with optional cursor pagination.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "knowledge-bases",
+                ":knowledge_base_id",
+                "resources"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Optional identifier for the page that should be returned. If it is not provided, the first page will be returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "50",
+                  "description": "Number of items to be returned in the page."
+                },
+                {
+                  "disabled": false,
+                  "key": "direction",
+                  "value": "next",
+                  "description": "Direction for pagination: 'next' to advance through pages (older items), 'prev' to go back (newer items)"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "knowledge_base_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8b627aab-42fa-4bd6-b5a1-0975653d04eb",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "knowledge-bases",
+                    ":knowledge_base_id",
+                    "resources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "50"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "next"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "knowledge_base_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"key_0\": true,\n  \"key_1\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e524ffac-56c3-4e4a-b21f-b5ae494900fd",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "knowledge-bases",
+                    ":knowledge_base_id",
+                    "resources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "50"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "next"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "knowledge_base_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cadaa48b-8558-4199-af8e-27c0482aa86d",
+          "name": "Create Resource",
+          "request": {
+            "name": "Create Resource",
+            "description": {
+              "content": "Upload a file directly to a knowledge base and start indexing.\n\nThis endpoint allows API users to upload files directly without needing to use\npresigned URLs. The file is uploaded to storage and indexing is started automatically.\nReturns the resource ID so callers can poll for indexing status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "knowledge-bases",
+                ":knowledge_base_id",
+                "resources"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "knowledge_base_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "description": "(Required) The file to upload to the knowledge base"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "c2595f61-c9e5-45a8-86ba-44060427b897",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "knowledge-bases",
+                    ":knowledge_base_id",
+                    "resources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "knowledge_base_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) The file to upload to the knowledge base",
+                        "type": "text/plain"
+                      },
+                      "key": "file",
+                      "value": "<binary>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"resource_id\": \"91e68eb9-1fb0-0a49-faf6-4448246a3d50\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ffcaad13-f118-48ae-8025-4a6ccf18f1ae",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "knowledge-bases",
+                    ":knowledge_base_id",
+                    "resources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "knowledge_base_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) The file to upload to the knowledge base",
+                        "type": "text/plain"
+                      },
+                      "key": "file",
+                      "value": "<binary>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "516f373b-6fae-4f9e-9d82-57e571d6a4e1",
+          "name": "Get Resource By Id",
+          "request": {
+            "name": "Get Resource By Id",
+            "description": {
+              "content": "Get one file resource by ID from the knowledge base.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "knowledge-bases",
+                ":knowledge_base_id",
+                "resources",
+                ":resource_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "knowledge_base_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "resource_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "747d400f-964a-4cee-ba02-12eb79432729",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "knowledge-bases",
+                    ":knowledge_base_id",
+                    "resources",
+                    ":resource_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "knowledge_base_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "resource_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"knowledge_base_id\": \"e741aa20-de37-7b56-3dae-3f22a79c901e\",\n  \"created_at\": \"1967-02-12T22:41:56.518Z\",\n  \"modified_at\": \"1961-03-25T20:18:13.749Z\",\n  \"resource_id\": \"c8fec5a1-d952-6475-4304-31510b36f554\",\n  \"resource_path\": \"string\",\n  \"content_hash\": \"string\",\n  \"content_mime\": \"string\",\n  \"size\": 1945,\n  \"status\": \"deleted\",\n  \"indexed_at\": \"2011-06-03T23:18:48.207Z\",\n  \"dataloader_metadata\": {\n    \">x(i(xWwpN\": \"\"\n  },\n  \"user_metadata\": {\n    \"xBm\": \"\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fab53573-0b01-4f6c-aca2-3a91f1c17155",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "knowledge-bases",
+                    ":knowledge_base_id",
+                    "resources",
+                    ":resource_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "knowledge_base_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "resource_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "772d48a3-e2b6-486b-896e-4f8bfa5e23cd",
+          "name": "Delete Resource By Id",
+          "request": {
+            "name": "Delete Resource By Id",
+            "description": {
+              "content": "Delete a file resource by ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "knowledge-bases",
+                ":knowledge_base_id",
+                "resources",
+                ":resource_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "knowledge_base_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "resource_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0aed6c94-fa35-461e-908d-7cce8dd7772b",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "knowledge-bases",
+                    ":knowledge_base_id",
+                    "resources",
+                    ":resource_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "knowledge_base_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "resource_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9e183da1-1c1e-4cf6-a3ad-d4357e422d0e",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "knowledge-bases",
+                    ":knowledge_base_id",
+                    "resources",
+                    ":resource_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "knowledge_base_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "resource_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "06df61be-5d84-4f96-afa8-706afc7a4bd1",
+          "name": "Synchronize Knowledge Base",
+          "request": {
+            "name": "Synchronize Knowledge Base",
+            "description": {
+              "content": "Synchronize the knowledge base.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "knowledge-bases",
+                ":knowledge_base_id",
+                "sync"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "knowledge_base_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "dc66a785-1a56-4d5a-9aee-1936e057456b",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "knowledge-bases",
+                    ":knowledge_base_id",
+                    "sync"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "knowledge_base_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"status\": \"accepted\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dc6d1f27-1a0b-4235-be90-c36e3ed499f5",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "knowledge-bases",
+                    ":knowledge_base_id",
+                    "sync"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "knowledge_base_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a2f65d2f-cebf-441e-b7a9-570c8906c262",
+          "name": "Get Knowledge Bases",
+          "request": {
+            "name": "Get Knowledge Bases",
+            "description": {
+              "content": "List all available knowledge bases for the specified flow.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "knowledge-bases"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "Optional identifier for the page that should be returned. If it is not provided, the first page will be returned."
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "50",
+                  "description": "Number of items to be returned in the page."
+                },
+                {
+                  "disabled": false,
+                  "key": "direction",
+                  "value": "next",
+                  "description": "Direction for pagination: 'next' to advance through pages (older items), 'prev' to go back (newer items)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b69a1a72-c138-473a-a82a-6ce0f77d50c8",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "knowledge-bases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "50"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "next"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"knowledge_base_id\": \"9f9cee60-7a9c-d7ab-f5b9-59585a76c6c3\",\n    \"connection_id\": \"a47964bc-a022-4a2e-c9ee-8a6221697ef0\",\n    \"created_at\": \"1953-03-28T15:15:36.348Z\",\n    \"updated_at\": \"1950-03-31T20:06:20.879Z\",\n    \"connection_source_ids\": [\n      \"string\"\n    ],\n    \"website_sources\": [\n      {\n        \"original_search_term\": \"string\",\n        \"selected_resources\": [\n          \"string\",\n          \"string\"\n        ],\n        \"source_type\": \"sitemap\"\n      },\n      {\n        \"original_search_term\": \"string\",\n        \"selected_resources\": [\n          \"string\",\n          \"string\"\n        ],\n        \"source_type\": \"sitemap\"\n      }\n    ],\n    \"indexing_params\": {\n      \"embedding_params\": {\n        \"embedding_model\": \"string\",\n        \"api_key\": \"string\"\n      },\n      \"ocr\": false,\n      \"chunker_params\": {\n        \"chunk_size\": 1500,\n        \"chunk_overlap\": 500,\n        \"chunker_type\": \"sentence\"\n      }\n    },\n    \"org_id\": \"string\",\n    \"connection_provider_type\": \"string\",\n    \"is_empty\": true,\n    \"total_size\": 0,\n    \"total_files\": 0,\n    \"total_indexed_files\": 0,\n    \"total_error_files\": 0,\n    \"last_synced_at\": \"1995-04-18T07:20:44.114Z\",\n    \"name\": \"Unnamed Knowledge Base\",\n    \"description\": \"\",\n    \"role\": \"viewer\",\n    \"org_level_role\": \"admin\",\n    \"user_metadata_schema\": {\n      \"properties\": {\n        \"Ud%%5#\": \"\"\n      }\n    },\n    \"dataloader_metadata_schema\": {\n      \"properties\": {\n        \"B1x~:kR8xFi\": \"\"\n      }\n    }\n  },\n  {\n    \"knowledge_base_id\": \"6b7b6c32-9b95-bb53-7b23-dd08b8a9f5cc\",\n    \"connection_id\": \"e4684eb5-ca5d-0cc3-2729-9f3010ed66df\",\n    \"created_at\": \"1954-11-12T02:11:57.877Z\",\n    \"updated_at\": \"2018-06-19T08:42:13.608Z\",\n    \"connection_source_ids\": [\n      \"string\"\n    ],\n    \"website_sources\": [\n      {\n        \"original_search_term\": \"string\",\n        \"selected_resources\": [\n          \"string\",\n          \"string\"\n        ],\n        \"source_type\": \"sitemap\"\n      },\n      {\n        \"original_search_term\": \"string\",\n        \"selected_resources\": [\n          \"string\",\n          \"string\"\n        ],\n        \"source_type\": \"sitemap\"\n      }\n    ],\n    \"indexing_params\": {\n      \"embedding_params\": {\n        \"embedding_model\": \"string\",\n        \"api_key\": \"string\"\n      },\n      \"ocr\": false,\n      \"chunker_params\": {\n        \"chunk_size\": 1500,\n        \"chunk_overlap\": 500,\n        \"chunker_type\": \"sentence\"\n      }\n    },\n    \"org_id\": \"string\",\n    \"connection_provider_type\": \"string\",\n    \"is_empty\": true,\n    \"total_size\": 0,\n    \"total_files\": 0,\n    \"total_indexed_files\": 0,\n    \"total_error_files\": 0,\n    \"last_synced_at\": \"1957-10-23T01:43:58.884Z\",\n    \"name\": \"Unnamed Knowledge Base\",\n    \"description\": \"\",\n    \"role\": \"viewer\",\n    \"org_level_role\": \"editor\",\n    \"user_metadata_schema\": {\n      \"properties\": {\n        \"+*/Hz[\": \"\"\n      }\n    },\n    \"dataloader_metadata_schema\": {\n      \"properties\": {\n        \"RRQAlL\": \"\"\n      }\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "84e6f1c4-a53b-4189-813e-c110273a9b56",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "knowledge-bases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "50"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "next"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0faa23fc-890d-46fc-b7bb-8f18d17effda",
+          "name": "Create Knowledge Base",
+          "request": {
+            "name": "Create Knowledge Base",
+            "description": {
+              "content": "Create a new knowledge base.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "knowledge-bases"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"connection_id\": \"<uuid>\",\n  \"connection_source_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"website_sources\": [\n    {\n      \"original_search_term\": \"<string>\",\n      \"selected_resources\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"source_type\": \"sitemap\"\n    },\n    {\n      \"original_search_term\": \"<string>\",\n      \"selected_resources\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"source_type\": \"sitemap\"\n    }\n  ],\n  \"name\": \"Unnamed Knowledge Base\",\n  \"description\": \"\",\n  \"indexing_params\": {\n    \"ocr\": false,\n    \"embedding_params\": {\n      \"embedding_model\": \"openai.text-embedding-3-large\",\n      \"api_key\": \"<string>\"\n    },\n    \"chunker_params\": {\n      \"chunk_size\": 1500,\n      \"chunk_overlap\": 500,\n      \"chunker_type\": \"sentence\"\n    }\n  },\n  \"org_level_role\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "bf710e83-6595-4c84-a460-7fa99802f8e1",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "knowledge-bases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"connection_id\": \"<uuid>\",\n  \"connection_source_ids\": [\n    \"<string>\"\n  ],\n  \"website_sources\": [\n    {\n      \"original_search_term\": \"string\",\n      \"selected_resources\": [\n        \"string\",\n        \"string\"\n      ],\n      \"source_type\": \"sitemap\"\n    },\n    {\n      \"original_search_term\": \"string\",\n      \"selected_resources\": [\n        \"string\",\n        \"string\"\n      ],\n      \"source_type\": \"sitemap\"\n    }\n  ],\n  \"name\": \"Unnamed Knowledge Base\",\n  \"description\": \"\",\n  \"indexing_params\": {\n    \"ocr\": false,\n    \"embedding_params\": {\n      \"embedding_model\": \"openai.text-embedding-3-large\",\n      \"api_key\": \"string\"\n    },\n    \"chunker_params\": {\n      \"chunk_size\": 1500,\n      \"chunk_overlap\": 500,\n      \"chunker_type\": \"sentence\"\n    }\n  },\n  \"org_level_role\": \"admin\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"knowledge_base_id\": \"73e6670d-e254-8ce7-a13b-d1d1617c56bd\",\n  \"connection_id\": \"d165b639-645e-4517-dba4-af3677f05eb0\",\n  \"created_at\": \"1949-05-29T08:02:25.074Z\",\n  \"updated_at\": \"1986-07-07T02:28:13.129Z\",\n  \"connection_source_ids\": [\n    \"string\"\n  ],\n  \"website_sources\": [\n    {\n      \"original_search_term\": \"string\",\n      \"selected_resources\": [\n        \"string\",\n        \"string\"\n      ],\n      \"source_type\": \"sitemap\"\n    },\n    {\n      \"original_search_term\": \"string\",\n      \"selected_resources\": [\n        \"string\",\n        \"string\"\n      ],\n      \"source_type\": \"sitemap\"\n    }\n  ],\n  \"indexing_params\": {\n    \"embedding_params\": {\n      \"embedding_model\": \"string\",\n      \"api_key\": \"string\"\n    },\n    \"ocr\": false,\n    \"chunker_params\": {\n      \"chunk_size\": 1500,\n      \"chunk_overlap\": 500,\n      \"chunker_type\": \"sentence\"\n    }\n  },\n  \"org_id\": \"string\",\n  \"connection_provider_type\": \"string\",\n  \"is_empty\": true,\n  \"total_size\": 0,\n  \"total_files\": 0,\n  \"total_indexed_files\": 0,\n  \"total_error_files\": 0,\n  \"last_synced_at\": \"1972-01-02T11:43:38.841Z\",\n  \"name\": \"Unnamed Knowledge Base\",\n  \"description\": \"\",\n  \"role\": \"editor\",\n  \"org_level_role\": \"admin\",\n  \"user_metadata_schema\": {\n    \"properties\": {\n      \"TX+Ovk\\\"]M\": \"\"\n    }\n  },\n  \"dataloader_metadata_schema\": {\n    \"properties\": {\n      \"WX)qpd3\": \"\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "622e0c53-d38d-49b2-90b0-b4ccfc690310",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "knowledge-bases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"connection_id\": \"<uuid>\",\n  \"connection_source_ids\": [\n    \"<string>\"\n  ],\n  \"website_sources\": [\n    {\n      \"original_search_term\": \"string\",\n      \"selected_resources\": [\n        \"string\",\n        \"string\"\n      ],\n      \"source_type\": \"sitemap\"\n    },\n    {\n      \"original_search_term\": \"string\",\n      \"selected_resources\": [\n        \"string\",\n        \"string\"\n      ],\n      \"source_type\": \"sitemap\"\n    }\n  ],\n  \"name\": \"Unnamed Knowledge Base\",\n  \"description\": \"\",\n  \"indexing_params\": {\n    \"ocr\": false,\n    \"embedding_params\": {\n      \"embedding_model\": \"openai.text-embedding-3-large\",\n      \"api_key\": \"string\"\n    },\n    \"chunker_params\": {\n      \"chunk_size\": 1500,\n      \"chunk_overlap\": 500,\n      \"chunker_type\": \"sentence\"\n    }\n  },\n  \"org_level_role\": \"admin\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d7786614-c9ac-4a7d-ba88-f32b1cccdecf",
+          "name": "Get Knowledge Base By Id",
+          "request": {
+            "name": "Get Knowledge Base By Id",
+            "description": {
+              "content": "Get a knowledge base by its ID in the current organization.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "knowledge-bases",
+                ":knowledge_base_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "knowledge_base_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "466a840d-25fe-410a-b0b6-8deb0e04a3c0",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "knowledge-bases",
+                    ":knowledge_base_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "knowledge_base_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"knowledge_base_id\": \"73e6670d-e254-8ce7-a13b-d1d1617c56bd\",\n  \"connection_id\": \"d165b639-645e-4517-dba4-af3677f05eb0\",\n  \"created_at\": \"1949-05-29T08:02:25.074Z\",\n  \"updated_at\": \"1986-07-07T02:28:13.129Z\",\n  \"connection_source_ids\": [\n    \"string\"\n  ],\n  \"website_sources\": [\n    {\n      \"original_search_term\": \"string\",\n      \"selected_resources\": [\n        \"string\",\n        \"string\"\n      ],\n      \"source_type\": \"sitemap\"\n    },\n    {\n      \"original_search_term\": \"string\",\n      \"selected_resources\": [\n        \"string\",\n        \"string\"\n      ],\n      \"source_type\": \"sitemap\"\n    }\n  ],\n  \"indexing_params\": {\n    \"embedding_params\": {\n      \"embedding_model\": \"string\",\n      \"api_key\": \"string\"\n    },\n    \"ocr\": false,\n    \"chunker_params\": {\n      \"chunk_size\": 1500,\n      \"chunk_overlap\": 500,\n      \"chunker_type\": \"sentence\"\n    }\n  },\n  \"org_id\": \"string\",\n  \"connection_provider_type\": \"string\",\n  \"is_empty\": true,\n  \"total_size\": 0,\n  \"total_files\": 0,\n  \"total_indexed_files\": 0,\n  \"total_error_files\": 0,\n  \"last_synced_at\": \"1972-01-02T11:43:38.841Z\",\n  \"name\": \"Unnamed Knowledge Base\",\n  \"description\": \"\",\n  \"role\": \"editor\",\n  \"org_level_role\": \"admin\",\n  \"user_metadata_schema\": {\n    \"properties\": {\n      \"TX+Ovk\\\"]M\": \"\"\n    }\n  },\n  \"dataloader_metadata_schema\": {\n    \"properties\": {\n      \"WX)qpd3\": \"\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7f65c099-1b6a-4236-9071-cf19bfcfb12d",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "knowledge-bases",
+                    ":knowledge_base_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "knowledge_base_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "47fa7c08-6ba5-43bc-ab2e-712c751d134c",
+          "name": "Delete Knowledge Base",
+          "request": {
+            "name": "Delete Knowledge Base",
+            "description": {
+              "content": "Delete a knowledge base by its ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "knowledge-bases",
+                ":knowledge_base_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "knowledge_base_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6858ba32-b267-4a1f-8ea7-9fd1d1288d73",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "knowledge-bases",
+                    ":knowledge_base_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "knowledge_base_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8a2d1f88-1158-4563-82a9-633ee29303fa",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "knowledge-bases",
+                    ":knowledge_base_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "knowledge_base_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b7ceb236-909e-4665-bbfc-b5dcc3ca6826",
+          "name": "Update Knowledge Base",
+          "request": {
+            "name": "Update Knowledge Base",
+            "description": {
+              "content": "Update a knowledge base.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "knowledge-bases",
+                ":knowledge_base_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "knowledge_base_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"connection_id\": \"<uuid>\",\n  \"connection_source_ids\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"website_sources\": [\n    {\n      \"original_search_term\": \"<string>\",\n      \"selected_resources\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"source_type\": \"sitemap\"\n    },\n    {\n      \"original_search_term\": \"<string>\",\n      \"selected_resources\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"source_type\": \"sitemap\"\n    }\n  ],\n  \"name\": \"Unnamed Knowledge Base\",\n  \"description\": \"\",\n  \"indexing_params\": {\n    \"ocr\": false,\n    \"embedding_params\": {\n      \"embedding_model\": \"openai.text-embedding-3-large\",\n      \"api_key\": \"<string>\"\n    },\n    \"chunker_params\": {\n      \"chunk_size\": 1500,\n      \"chunk_overlap\": 500,\n      \"chunker_type\": \"sentence\"\n    }\n  },\n  \"org_level_role\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d838f854-bec0-489d-a202-253b2e2d94d9",
+              "name": "Successful Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "knowledge-bases",
+                    ":knowledge_base_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "knowledge_base_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"connection_id\": \"<uuid>\",\n  \"connection_source_ids\": [\n    \"<string>\"\n  ],\n  \"website_sources\": [\n    {\n      \"original_search_term\": \"string\",\n      \"selected_resources\": [\n        \"string\",\n        \"string\"\n      ],\n      \"source_type\": \"sitemap\"\n    },\n    {\n      \"original_search_term\": \"string\",\n      \"selected_resources\": [\n        \"string\",\n        \"string\"\n      ],\n      \"source_type\": \"sitemap\"\n    }\n  ],\n  \"name\": \"Unnamed Knowledge Base\",\n  \"description\": \"\",\n  \"indexing_params\": {\n    \"ocr\": false,\n    \"embedding_params\": {\n      \"embedding_model\": \"openai.text-embedding-3-large\",\n      \"api_key\": \"string\"\n    },\n    \"chunker_params\": {\n      \"chunk_size\": 1500,\n      \"chunk_overlap\": 500,\n      \"chunker_type\": \"sentence\"\n    }\n  },\n  \"org_level_role\": \"viewer\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"knowledge_base_id\": \"73e6670d-e254-8ce7-a13b-d1d1617c56bd\",\n  \"connection_id\": \"d165b639-645e-4517-dba4-af3677f05eb0\",\n  \"created_at\": \"1949-05-29T08:02:25.074Z\",\n  \"updated_at\": \"1986-07-07T02:28:13.129Z\",\n  \"connection_source_ids\": [\n    \"string\"\n  ],\n  \"website_sources\": [\n    {\n      \"original_search_term\": \"string\",\n      \"selected_resources\": [\n        \"string\",\n        \"string\"\n      ],\n      \"source_type\": \"sitemap\"\n    },\n    {\n      \"original_search_term\": \"string\",\n      \"selected_resources\": [\n        \"string\",\n        \"string\"\n      ],\n      \"source_type\": \"sitemap\"\n    }\n  ],\n  \"indexing_params\": {\n    \"embedding_params\": {\n      \"embedding_model\": \"string\",\n      \"api_key\": \"string\"\n    },\n    \"ocr\": false,\n    \"chunker_params\": {\n      \"chunk_size\": 1500,\n      \"chunk_overlap\": 500,\n      \"chunker_type\": \"sentence\"\n    }\n  },\n  \"org_id\": \"string\",\n  \"connection_provider_type\": \"string\",\n  \"is_empty\": true,\n  \"total_size\": 0,\n  \"total_files\": 0,\n  \"total_indexed_files\": 0,\n  \"total_error_files\": 0,\n  \"last_synced_at\": \"1972-01-02T11:43:38.841Z\",\n  \"name\": \"Unnamed Knowledge Base\",\n  \"description\": \"\",\n  \"role\": \"editor\",\n  \"org_level_role\": \"admin\",\n  \"user_metadata_schema\": {\n    \"properties\": {\n      \"TX+Ovk\\\"]M\": \"\"\n    }\n  },\n  \"dataloader_metadata_schema\": {\n    \"properties\": {\n      \"WX)qpd3\": \"\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2814d860-8295-442c-93e3-38a5ae030dd1",
+              "name": "Validation Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "knowledge-bases",
+                    ":knowledge_base_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "knowledge_base_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"connection_id\": \"<uuid>\",\n  \"connection_source_ids\": [\n    \"<string>\"\n  ],\n  \"website_sources\": [\n    {\n      \"original_search_term\": \"string\",\n      \"selected_resources\": [\n        \"string\",\n        \"string\"\n      ],\n      \"source_type\": \"sitemap\"\n    },\n    {\n      \"original_search_term\": \"string\",\n      \"selected_resources\": [\n        \"string\",\n        \"string\"\n      ],\n      \"source_type\": \"sitemap\"\n    }\n  ],\n  \"name\": \"Unnamed Knowledge Base\",\n  \"description\": \"\",\n  \"indexing_params\": {\n    \"ocr\": false,\n    \"embedding_params\": {\n      \"embedding_model\": \"openai.text-embedding-3-large\",\n      \"api_key\": \"string\"\n    },\n    \"chunker_params\": {\n      \"chunk_size\": 1500,\n      \"chunk_overlap\": 500,\n      \"chunker_type\": \"sentence\"\n    }\n  },\n  \"org_level_role\": \"viewer\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": [\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    },\n    {\n      \"loc\": [\n        \"string\",\n        \"string\"\n      ],\n      \"msg\": \"string\",\n      \"type\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.stack-ai.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "ae6c7ee4-0f66-47bb-bf0c-b8e0b3852f6f",
+    "name": "StackAI analytics Knowledge Bases API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "StackAI public REST API for running deployed agentic workflows (flows), managing Knowledge Bases and their file resources, and reading flow-run analytics. Assembled verbatim from the per-endpoint OpenAPI 3.1.0 documents published at https://docs.stackai.com/interface-and-deployment/api-reference.\n\nContact Support:\n Name: StackAI",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,244 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "StackAI analytics Knowledge Bases API",
+    "version": "0.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Knowledge Bases",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Resources",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stack-ai.com/v1/knowledge-bases/:knowledge_base_id/resources",
+            "params": [
+              {
+                "name": "knowledge_base_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Optional identifier for the page that should be returned. If it is not provided, the first page will be returned."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Number of items to be returned in the page."
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "Direction for pagination: 'next' to advance through pages (older items), 'prev' to go back (newer items)"
+              }
+            ]
+          },
+          "docs": "List files in the knowledge base with optional cursor pagination."
+        },
+        {
+          "info": {
+            "name": "Create Resource",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stack-ai.com/v1/knowledge-bases/:knowledge_base_id/resources",
+            "params": [
+              {
+                "name": "knowledge_base_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            }
+          },
+          "docs": "Upload a file directly to a knowledge base and start indexing.\n\nThis endpoint allows API users to upload files directly without needing to use\npresigned URLs. The file is uploaded to storage and indexing is started automatically.\nReturns the resource ID so callers can poll for indexing status."
+        },
+        {
+          "info": {
+            "name": "Get Resource By Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stack-ai.com/v1/knowledge-bases/:knowledge_base_id/resources/:resource_id",
+            "params": [
+              {
+                "name": "knowledge_base_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "resource_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get one file resource by ID from the knowledge base."
+        },
+        {
+          "info": {
+            "name": "Delete Resource By Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.stack-ai.com/v1/knowledge-bases/:knowledge_base_id/resources/:resource_id",
+            "params": [
+              {
+                "name": "knowledge_base_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "resource_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete a file resource by ID."
+        },
+        {
+          "info": {
+            "name": "Synchronize Knowledge Base",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stack-ai.com/v1/knowledge-bases/:knowledge_base_id/sync",
+            "params": [
+              {
+                "name": "knowledge_base_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Synchronize the knowledge base."
+        },
+        {
+          "info": {
+            "name": "Get Knowledge Bases",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stack-ai.com/v1/knowledge-bases",
+            "params": [
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Optional identifier for the page that should be returned. If it is not provided, the first page will be returned."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "Number of items to be returned in the page."
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "Direction for pagination: 'next' to advance through pages (older items), 'prev' to go back (newer items)"
+              }
+            ]
+          },
+          "docs": "List all available knowledge bases for the specified flow."
+        },
+        {
+          "info": {
+            "name": "Create Knowledge Base",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.stack-ai.com/v1/knowledge-bases",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new knowledge base."
+        },
+        {
+          "info": {
+            "name": "Get Knowledge Base By Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.stack-ai.com/v1/knowledge-bases/:knowledge_base_id",
+            "params": [
+              {
+                "name": "knowledge_base_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a knowledge base by its ID in the current organization."
+        },
+        {
+          "info": {
+            "name": "Update Knowledge Base",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.stack-ai.com/v1/knowledge-bases/:knowledge_base_id",
+            "params": [
+              {
+                "name": "knowledge_base_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a knowledge base."
+        },
+        {
+          "info": {
+            "name": "Delete Knowledge Base",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.stack-ai.com/v1/knowledge-bases/:knowledge_base_id",
+            "params": [
+              {
+                "name": "knowledge_base_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete a knowledge base by its ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
