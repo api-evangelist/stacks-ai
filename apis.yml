@@ -194,6 +194,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Website
+  url: https://www.stackai.com/
 - type: AgentSkill
   url: skills/stacks-ai-build-knowledge-base.md
 - type: X-MCPServerCandidate
