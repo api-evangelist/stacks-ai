@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: StackAI analytics Knowledge Base Resources API
+  title: StackAI Knowledge Base Resources API
   version: 0.1.0
   description: StackAI public REST API for running deployed agentic workflows (flows), managing Knowledge Bases and their file resources, and reading flow-run analytics. Assembled verbatim from the per-endpoint OpenAPI 3.1.0 documents published at https://docs.stackai.com/interface-and-deployment/api-reference.
   contact:
@@ -178,30 +178,36 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     KnowledgeBaseResourcesResponse:
       additionalProperties: true
       type: object
-    ValidationError:
+    Body_uploadKnowledgeBaseResource:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
+        file:
           type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
+          format: binary
+          title: File
+          description: The file to upload to the knowledge base
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - file
+      title: Body_uploadKnowledgeBaseResource
+    PaginationDirection:
+      type: string
+      enum:
+      - next
+      - prev
+      title: PaginationDirection
+      description: Direction for cursor-based pagination.
     StackFileStatusEnum:
       type: string
       enum:
@@ -214,48 +220,6 @@ components:
       - error
       title: StackFileStatusEnum
       description: Processing status of a file in a knowledge base.
-    PaginationDirection:
-      type: string
-      enum:
-      - next
-      - prev
-      title: PaginationDirection
-      description: Direction for cursor-based pagination.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ResourceUploadResponse:
-      properties:
-        message:
-          type: string
-          title: Message
-        resource_id:
-          type: string
-          format: uuid
-          title: Resource Id
-      type: object
-      required:
-      - message
-      - resource_id
-      title: ResourceUploadResponse
-      description: Result of a file upload, including the resource ID for status polling.
-    Body_uploadKnowledgeBaseResource:
-      properties:
-        file:
-          type: string
-          format: binary
-          title: File
-          description: The file to upload to the knowledge base
-      type: object
-      required:
-      - file
-      title: Body_uploadKnowledgeBaseResource
     KnowledgeBaseFileResponse:
       properties:
         knowledge_base_id:
@@ -335,6 +299,42 @@ components:
       - status
       title: KnowledgeBaseFileResponse
       description: A file stored in a knowledge base.
+    ResourceUploadResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+        resource_id:
+          type: string
+          format: uuid
+          title: Resource Id
+      type: object
+      required:
+      - message
+      - resource_id
+      title: ResourceUploadResponse
+      description: Result of a file upload, including the resource ID for status polling.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
   securitySchemes:
     OAuth2PasswordBearer:
       type: oauth2

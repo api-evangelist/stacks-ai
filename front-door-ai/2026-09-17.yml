@@ -1,0 +1,31 @@
+# Front Door AI Index — stacks-ai — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: stacks-ai
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: www.stackai.com
+  final_host: www.stackai.com
+  ownership: own
+  owner: stacks-ai
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 105
+  host_score: 105
+  density: 46.32
+  words: 2267
+  tiers:
+    agentic: 34
+    core: 71
+    model: 0
+  ambiguous: 26
+  top_terms:
+    AI: 71
+    agent: 26
+    AI agent: 14
+    agentic: 6
+    AI assistant: 5
+    chatbot: 5
+    RAG: 4

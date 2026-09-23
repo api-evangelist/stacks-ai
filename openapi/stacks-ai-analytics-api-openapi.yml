@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: StackAI analytics API
+  title: StackAI Analytics API
   version: 0.1.0
   description: StackAI public REST API for running deployed agentic workflows (flows), managing Knowledge Bases and their file resources, and reading flow-run analytics. Assembled verbatim from the per-endpoint OpenAPI 3.1.0 documents published at https://docs.stackai.com/interface-and-deployment/api-reference.
   contact:
@@ -12,12 +12,12 @@ servers:
 - url: https://stack-inference.com
   description: Inference host for running deployed flows
 tags:
-- name: analytics
+- name: Analytics
 paths:
   /analytics/org/{org_id}/flows/{flow_id}:
     get:
       tags:
-      - analytics
+      - Analytics
       summary: List Flow Runs
       description: List flow run logs matching the given filters.
       operationId: getAnalyticsDataApi
@@ -105,7 +105,7 @@ paths:
   /organizations/analytics/projects-run-summary:
     get:
       tags:
-      - analytics
+      - Analytics
       summary: List Project Run Summary
       description: Org-level analytics for all projects. List with the project run logs matching the given filters.
       operationId: get_org_analytics_data_api_organizations_analytics_projects_run_summary_get
@@ -162,75 +162,15 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    OrgProjectRunSummary:
+    HTTPValidationError:
       properties:
-        project_id:
-          type: string
-          title: Project Id
-        project_owner:
-          type: object
-          properties:
-            user_id:
-              type: string
-              title: User Id
-            email:
-              type: string
-              title: Email
-            avatar_url:
-              type: string
-              format: uri
-              title: Avatar Url
-          required:
-          - user_id
-          - email
-          - avatar_url
-          title: Project Owner
-        project_type:
-          type: string
-          title: Project Type
-        project_name:
-          type: string
-          title: Project Name
-        total_runs:
-          type: integer
-          title: Total Runs
-        total_errors:
-          type: integer
-          title: Total Errors
-        total_tokens:
-          type: integer
-          title: Total Tokens
-        total_users:
-          type: integer
-          title: Total Users
-        is_published:
-          type: boolean
-          title: Is Published
-        public_ui_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Public Ui Url
-        public_ui_type:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Public Ui Type
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - project_id
-      - project_owner
-      - project_type
-      - project_name
-      - total_runs
-      - total_errors
-      - total_tokens
-      - total_users
-      - is_published
-      - public_ui_url
-      - public_ui_type
-      title: OrgProjectRunSummary
-      description: A row with information about project run summary at the organization level.
+      title: HTTPValidationError
     LLMUsageData:
       properties:
         provider:
@@ -284,36 +224,6 @@ components:
       - should_charge
       title: LLMUsageData
       description: Token usage for a single LLM call within a run.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    RanByType:
-      type: string
-      enum:
-      - user
-      - personal_api_key
-      - org_api_key
-      - system
-      title: RanByType
-      description: Who or what authenticated the run.
     ProjectRunSummary:
       properties:
         run_id:
@@ -439,31 +349,6 @@ components:
       - feedback
       title: ProjectRunSummary
       description: Summary of a single workflow run.
-    RunType:
-      type: string
-      enum:
-      - workflow_builder
-      - form
-      - batch
-      - chat_assistant
-      - agent_assistant
-      - trigger
-      - scheduled
-      - sub_workflow
-      - api
-      title: RunType
-      description: How a workflow run was initiated.
-    WorkflowState:
-      type: string
-      enum:
-      - PENDING
-      - PAUSED
-      - RESUMED
-      - COMPLETED
-      - FAILED
-      - CANCELLED
-      title: WorkflowState
-      description: Enum representing the possible states of a workflow.
     LLMConnectionOrigin:
       type: string
       enum:
@@ -471,15 +356,6 @@ components:
       - external_db
       - external_ephemeral
       title: LLMConnectionOrigin
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     LLMProviderEnum:
       type: string
       enum:
@@ -500,6 +376,130 @@ components:
       - XAI
       title: LLMProviderEnum
       description: LLM provider identifiers.
+    WorkflowState:
+      type: string
+      enum:
+      - PENDING
+      - PAUSED
+      - RESUMED
+      - COMPLETED
+      - FAILED
+      - CANCELLED
+      title: WorkflowState
+      description: Enum representing the possible states of a workflow.
+    OrgProjectRunSummary:
+      properties:
+        project_id:
+          type: string
+          title: Project Id
+        project_owner:
+          type: object
+          properties:
+            user_id:
+              type: string
+              title: User Id
+            email:
+              type: string
+              title: Email
+            avatar_url:
+              type: string
+              format: uri
+              title: Avatar Url
+          required:
+          - user_id
+          - email
+          - avatar_url
+          title: Project Owner
+        project_type:
+          type: string
+          title: Project Type
+        project_name:
+          type: string
+          title: Project Name
+        total_runs:
+          type: integer
+          title: Total Runs
+        total_errors:
+          type: integer
+          title: Total Errors
+        total_tokens:
+          type: integer
+          title: Total Tokens
+        total_users:
+          type: integer
+          title: Total Users
+        is_published:
+          type: boolean
+          title: Is Published
+        public_ui_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Public Ui Url
+        public_ui_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Public Ui Type
+      type: object
+      required:
+      - project_id
+      - project_owner
+      - project_type
+      - project_name
+      - total_runs
+      - total_errors
+      - total_tokens
+      - total_users
+      - is_published
+      - public_ui_url
+      - public_ui_type
+      title: OrgProjectRunSummary
+      description: A row with information about project run summary at the organization level.
+    RanByType:
+      type: string
+      enum:
+      - user
+      - personal_api_key
+      - org_api_key
+      - system
+      title: RanByType
+      description: Who or what authenticated the run.
+    RunType:
+      type: string
+      enum:
+      - workflow_builder
+      - form
+      - batch
+      - chat_assistant
+      - agent_assistant
+      - trigger
+      - scheduled
+      - sub_workflow
+      - api
+      title: RunType
+      description: How a workflow run was initiated.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
   securitySchemes:
     OAuth2PasswordBearer:
       type: oauth2

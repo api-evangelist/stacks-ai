@@ -1,22 +1,33 @@
 {
   "provider": "stacks-ai",
   "sources": [
-    "stacks-ai-analytics-api-openapi.yml",
-    "stacks-ai-knowledge-base-resources-api-openapi.yml",
-    "stacks-ai-knowledge-base-sync-api-openapi.yml",
-    "stacks-ai-knowledge-bases-api-openapi.yml",
-    "stacks-ai-run-flow-api-openapi.yml"
+    "_original/stacks-ai-openapi-original.yml"
   ],
   "outputs": [
-    "stacks-ai-analytics-api-openapi.yml",
     "stacks-ai-knowledge-base-resources-api-openapi.yml",
     "stacks-ai-knowledge-base-sync-api-openapi.yml",
     "stacks-ai-knowledge-bases-api-openapi.yml",
-    "stacks-ai-run-flow-api-openapi.yml"
+    "stacks-ai-run-flow-api-openapi.yml",
+    "stacks-ai-analytics-api-openapi.yml"
   ],
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "stacks-ai-openapi-original.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "stacks-ai-openapi-original.yml: declared missing tag: Knowledge Base Resources",
+    "stacks-ai-openapi-original.yml: declared missing tag: Knowledge Base Sync",
+    "stacks-ai-openapi-original.yml: declared missing tag: Knowledge Bases",
+    "stacks-ai-openapi-original.yml: declared missing tag: Run Flow",
+    "stacks-ai-openapi-original.yml: declared missing tag: analytics",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "stacks-ai-analytics-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "stacks-ai-knowledge-base-resources-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "stacks-ai-knowledge-base-sync-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "stacks-ai-knowledge-bases-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "stacks-ai-run-flow-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
