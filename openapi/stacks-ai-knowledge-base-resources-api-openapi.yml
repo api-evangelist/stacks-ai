@@ -178,18 +178,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    KnowledgeBaseResourcesResponse:
-      additionalProperties: true
-      type: object
     Body_uploadKnowledgeBaseResource:
       properties:
         file:
@@ -201,13 +189,6 @@ components:
       required:
       - file
       title: Body_uploadKnowledgeBaseResource
-    PaginationDirection:
-      type: string
-      enum:
-      - next
-      - prev
-      title: PaginationDirection
-      description: Direction for cursor-based pagination.
     StackFileStatusEnum:
       type: string
       enum:
@@ -220,6 +201,28 @@ components:
       - error
       title: StackFileStatusEnum
       description: Processing status of a file in a knowledge base.
+    PaginationDirection:
+      type: string
+      enum:
+      - next
+      - prev
+      title: PaginationDirection
+      description: Direction for cursor-based pagination.
+    ResourceUploadResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+        resource_id:
+          type: string
+          format: uuid
+          title: Resource Id
+      type: object
+      required:
+      - message
+      - resource_id
+      title: ResourceUploadResponse
+      description: Result of a file upload, including the resource ID for status polling.
     KnowledgeBaseFileResponse:
       properties:
         knowledge_base_id:
@@ -299,21 +302,18 @@ components:
       - status
       title: KnowledgeBaseFileResponse
       description: A file stored in a knowledge base.
-    ResourceUploadResponse:
-      properties:
-        message:
-          type: string
-          title: Message
-        resource_id:
-          type: string
-          format: uuid
-          title: Resource Id
+    KnowledgeBaseResourcesResponse:
+      additionalProperties: true
       type: object
-      required:
-      - message
-      - resource_id
-      title: ResourceUploadResponse
-      description: Result of a file upload, including the resource ID for status polling.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:

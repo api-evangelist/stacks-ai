@@ -66,7 +66,7 @@ tags_raw:
 - Enterprise
 apis:
 - aid: stacks-ai:stacks-ai-analytics-api
-  name: Stacks Ai analytics API
+  name: Stacks Ai Analytics API
   description: The analytics API from Stacks Ai — 2 operation(s) for analytics.
   humanURL: https://docs.stackai.com/interface-and-deployment/api-reference
   baseURL: https://api.stack-ai.com
