@@ -162,17 +162,96 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    WorkflowState:
-      type: string
-      enum:
-      - PENDING
-      - PAUSED
-      - RESUMED
-      - COMPLETED
-      - FAILED
-      - CANCELLED
-      title: WorkflowState
-      description: Enum representing the possible states of a workflow.
+    OrgProjectRunSummary:
+      properties:
+        project_id:
+          type: string
+          title: Project Id
+        project_owner:
+          type: object
+          properties:
+            user_id:
+              type: string
+              title: User Id
+            email:
+              type: string
+              title: Email
+            avatar_url:
+              type: string
+              format: uri
+              title: Avatar Url
+          required:
+          - user_id
+          - email
+          - avatar_url
+          title: Project Owner
+        project_type:
+          type: string
+          title: Project Type
+        project_name:
+          type: string
+          title: Project Name
+        total_runs:
+          type: integer
+          title: Total Runs
+        total_errors:
+          type: integer
+          title: Total Errors
+        total_tokens:
+          type: integer
+          title: Total Tokens
+        total_users:
+          type: integer
+          title: Total Users
+        is_published:
+          type: boolean
+          title: Is Published
+        public_ui_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Public Ui Url
+        public_ui_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Public Ui Type
+      type: object
+      required:
+      - project_id
+      - project_owner
+      - project_type
+      - project_name
+      - total_runs
+      - total_errors
+      - total_tokens
+      - total_users
+      - is_published
+      - public_ui_url
+      - public_ui_type
+      title: OrgProjectRunSummary
+      description: A row with information about project run summary at the organization level.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     ProjectRunSummary:
       properties:
         run_id:
@@ -298,6 +377,42 @@ components:
       - feedback
       title: ProjectRunSummary
       description: Summary of a single workflow run.
+    RanByType:
+      type: string
+      enum:
+      - user
+      - personal_api_key
+      - org_api_key
+      - system
+      title: RanByType
+      description: Who or what authenticated the run.
+    LLMConnectionOrigin:
+      type: string
+      enum:
+      - stack_ai
+      - external_db
+      - external_ephemeral
+      title: LLMConnectionOrigin
+    LLMProviderEnum:
+      type: string
+      enum:
+      - Anthropic
+      - Azure
+      - Bedrock
+      - Cerebras
+      - Google
+      - Google_service_account
+      - Groq
+      - Local
+      - Meta
+      - Mistral
+      - OpenAI
+      - Perplexity
+      - Replicate
+      - TogetherAI
+      - XAI
+      title: LLMProviderEnum
+      description: LLM provider identifiers.
     LLMUsageData:
       properties:
         provider:
@@ -351,111 +466,17 @@ components:
       - should_charge
       title: LLMUsageData
       description: Token usage for a single LLM call within a run.
-    OrgProjectRunSummary:
-      properties:
-        project_id:
-          type: string
-          title: Project Id
-        project_owner:
-          type: object
-          properties:
-            user_id:
-              type: string
-              title: User Id
-            email:
-              type: string
-              title: Email
-            avatar_url:
-              type: string
-              format: uri
-              title: Avatar Url
-          required:
-          - user_id
-          - email
-          - avatar_url
-          title: Project Owner
-        project_type:
-          type: string
-          title: Project Type
-        project_name:
-          type: string
-          title: Project Name
-        total_runs:
-          type: integer
-          title: Total Runs
-        total_errors:
-          type: integer
-          title: Total Errors
-        total_tokens:
-          type: integer
-          title: Total Tokens
-        total_users:
-          type: integer
-          title: Total Users
-        is_published:
-          type: boolean
-          title: Is Published
-        public_ui_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Public Ui Url
-        public_ui_type:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Public Ui Type
-      type: object
-      required:
-      - project_id
-      - project_owner
-      - project_type
-      - project_name
-      - total_runs
-      - total_errors
-      - total_tokens
-      - total_users
-      - is_published
-      - public_ui_url
-      - public_ui_type
-      title: OrgProjectRunSummary
-      description: A row with information about project run summary at the organization level.
-    LLMConnectionOrigin:
+    WorkflowState:
       type: string
       enum:
-      - stack_ai
-      - external_db
-      - external_ephemeral
-      title: LLMConnectionOrigin
-    LLMProviderEnum:
-      type: string
-      enum:
-      - Anthropic
-      - Azure
-      - Bedrock
-      - Cerebras
-      - Google
-      - Google_service_account
-      - Groq
-      - Local
-      - Meta
-      - Mistral
-      - OpenAI
-      - Perplexity
-      - Replicate
-      - TogetherAI
-      - XAI
-      title: LLMProviderEnum
-      description: LLM provider identifiers.
-    RanByType:
-      type: string
-      enum:
-      - user
-      - personal_api_key
-      - org_api_key
-      - system
-      title: RanByType
-      description: Who or what authenticated the run.
+      - PENDING
+      - PAUSED
+      - RESUMED
+      - COMPLETED
+      - FAILED
+      - CANCELLED
+      title: WorkflowState
+      description: Enum representing the possible states of a workflow.
     RunType:
       type: string
       enum:
@@ -479,27 +500,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
   securitySchemes:
     OAuth2PasswordBearer:
       type: oauth2

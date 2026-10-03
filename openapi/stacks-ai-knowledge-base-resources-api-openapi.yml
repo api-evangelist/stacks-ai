@@ -178,17 +178,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    Body_uploadKnowledgeBaseResource:
-      properties:
-        file:
-          type: string
-          format: binary
-          title: File
-          description: The file to upload to the knowledge base
-      type: object
-      required:
-      - file
-      title: Body_uploadKnowledgeBaseResource
     StackFileStatusEnum:
       type: string
       enum:
@@ -201,13 +190,6 @@ components:
       - error
       title: StackFileStatusEnum
       description: Processing status of a file in a knowledge base.
-    PaginationDirection:
-      type: string
-      enum:
-      - next
-      - prev
-      title: PaginationDirection
-      description: Direction for cursor-based pagination.
     ResourceUploadResponse:
       properties:
         message:
@@ -223,6 +205,30 @@ components:
       - resource_id
       title: ResourceUploadResponse
       description: Result of a file upload, including the resource ID for status polling.
+    KnowledgeBaseResourcesResponse:
+      additionalProperties: true
+      type: object
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     KnowledgeBaseFileResponse:
       properties:
         knowledge_base_id:
@@ -302,9 +308,24 @@ components:
       - status
       title: KnowledgeBaseFileResponse
       description: A file stored in a knowledge base.
-    KnowledgeBaseResourcesResponse:
-      additionalProperties: true
+    PaginationDirection:
+      type: string
+      enum:
+      - next
+      - prev
+      title: PaginationDirection
+      description: Direction for cursor-based pagination.
+    Body_uploadKnowledgeBaseResource:
+      properties:
+        file:
+          type: string
+          format: binary
+          title: File
+          description: The file to upload to the knowledge base
       type: object
+      required:
+      - file
+      title: Body_uploadKnowledgeBaseResource
     HTTPValidationError:
       properties:
         detail:
@@ -314,27 +335,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
   securitySchemes:
     OAuth2PasswordBearer:
       type: oauth2
