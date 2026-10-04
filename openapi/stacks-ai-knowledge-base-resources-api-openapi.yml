@@ -178,57 +178,27 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    StackFileStatusEnum:
+    PaginationDirection:
       type: string
       enum:
-      - resource
-      - parsed
-      - indexed
-      - pending
-      - pending_delete
-      - deleted
-      - error
-      title: StackFileStatusEnum
-      description: Processing status of a file in a knowledge base.
-    ResourceUploadResponse:
-      properties:
-        message:
-          type: string
-          title: Message
-        resource_id:
-          type: string
-          format: uuid
-          title: Resource Id
-      type: object
-      required:
-      - message
-      - resource_id
-      title: ResourceUploadResponse
-      description: Result of a file upload, including the resource ID for status polling.
+      - next
+      - prev
+      title: PaginationDirection
+      description: Direction for cursor-based pagination.
     KnowledgeBaseResourcesResponse:
       additionalProperties: true
       type: object
-    ValidationError:
+    Body_uploadKnowledgeBaseResource:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
+        file:
           type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
+          format: binary
+          title: File
+          description: The file to upload to the knowledge base
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - file
+      title: Body_uploadKnowledgeBaseResource
     KnowledgeBaseFileResponse:
       properties:
         knowledge_base_id:
@@ -308,24 +278,33 @@ components:
       - status
       title: KnowledgeBaseFileResponse
       description: A file stored in a knowledge base.
-    PaginationDirection:
-      type: string
-      enum:
-      - next
-      - prev
-      title: PaginationDirection
-      description: Direction for cursor-based pagination.
-    Body_uploadKnowledgeBaseResource:
+    ResourceUploadResponse:
       properties:
-        file:
+        message:
           type: string
-          format: binary
-          title: File
-          description: The file to upload to the knowledge base
+          title: Message
+        resource_id:
+          type: string
+          format: uuid
+          title: Resource Id
       type: object
       required:
-      - file
-      title: Body_uploadKnowledgeBaseResource
+      - message
+      - resource_id
+      title: ResourceUploadResponse
+      description: Result of a file upload, including the resource ID for status polling.
+    StackFileStatusEnum:
+      type: string
+      enum:
+      - resource
+      - parsed
+      - indexed
+      - pending
+      - pending_delete
+      - deleted
+      - error
+      title: StackFileStatusEnum
+      description: Processing status of a file in a knowledge base.
     HTTPValidationError:
       properties:
         detail:
@@ -335,6 +314,27 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
   securitySchemes:
     OAuth2PasswordBearer:
       type: oauth2
