@@ -1,0 +1,57 @@
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-10-07'
+method: searched
+source: https://www.stackai.com/pricing
+sources:
+- https://www.stackai.com/pricing
+provenance:
+  tool: all/0-working/economics/harvest_pricing.py
+  run: 20261007T104522
+  grounding: every price_text was found verbatim in the fetched page text
+audience: business-product
+pricing_basis: tiered-subscription
+delivery:
+  delivery: managed+licensed
+  method: page
+  read: '2026-10-07'
+  evidence: On-prem deployment
+published: true
+note: Only numeric price is $0 free tier; Enterprise is custom quote. On-prem/VPC deployment offered under
+  Enterprise plan.
+plan_count: 2
+currency: USD
+plans:
+- name: Free plan
+  price_text: $0
+  price: 0
+  currency: USD
+  period: month
+  included_quota: 500 runs per month*, 2 Projects, 1 Seat, Community support on Discord
+- name: Enterprise
+  price_text: Custom
+  period: month
+  included_quota: Custom number of runs*, Unlimited projects, Custom number of seats, all features, on-prem/VPC
+    deployment, SSO
+rate_limit_statements:
+- 500 runs per month*
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - free
+  units: []
+  plans:
+  - name: Free plan
+    access: other
+    model: free
+    model_how: derived
+    units: []
+    periods:
+    - month
+  - name: Enterprise
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods:
+    - month
