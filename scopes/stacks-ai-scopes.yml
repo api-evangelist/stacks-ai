@@ -1,11 +1,39 @@
-generated: '2026-07-21'
-method: derived
-source: openapi/stacks-ai-openapi-original.yml
+generated: '2026-10-14'
+method: none
+source: openapi/stacks-ai-analytics-api-openapi.yml, openapi/stacks-ai-knowledge-base-resources-api-openapi.yml,
+  openapi/stacks-ai-knowledge-base-sync-api-openapi.yml, openapi/stacks-ai-knowledge-bases-api-openapi.yml,
+  openapi/stacks-ai-run-flow-api-openapi.yml
 schemes:
 - name: OAuth2PasswordBearer
-  source: openapi/stacks-ai-openapi-original.yml
+  source: openapi/stacks-ai-analytics-api-openapi.yml
+  flows:
+  - flow: password
+    tokenUrl: token
+  description: Authorization header. [Learn how to get it](/docs/api-reference/how-to-get-credentials).
+- name: OAuth2PasswordBearer
+  source: openapi/stacks-ai-knowledge-base-resources-api-openapi.yml
+  flows:
+  - flow: password
+    tokenUrl: token
+  description: Authorization header. [Learn how to get it](/docs/api-reference/how-to-get-credentials).
+- name: OAuth2PasswordBearer
+  source: openapi/stacks-ai-knowledge-base-sync-api-openapi.yml
+  flows:
+  - flow: password
+    tokenUrl: token
+  description: Authorization header. [Learn how to get it](/docs/api-reference/how-to-get-credentials).
+- name: OAuth2PasswordBearer
+  source: openapi/stacks-ai-knowledge-bases-api-openapi.yml
+  flows:
+  - flow: password
+    tokenUrl: token
+  description: Authorization header. [Learn how to get it](/docs/api-reference/how-to-get-credentials).
+- name: OAuth2PasswordBearer
+  source: openapi/stacks-ai-run-flow-api-openapi.yml
   flows:
   - flow: password
     tokenUrl: token
   description: Authorization header. [Learn how to get it](/docs/api-reference/how-to-get-credentials).
 scopes: []
+note: The OAuth2 security scheme(s) in the OpenAPI declare no scopes, and no security requirement
+  references one.
