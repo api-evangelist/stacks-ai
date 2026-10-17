@@ -368,6 +368,87 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    CreateKnowledgeBaseRequest:
+      properties:
+        connection_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Connection Id
+        connection_source_ids:
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+          title: Connection Source Ids
+        website_sources:
+          items:
+            $ref: '#/components/schemas/SelectedWebsiteSource'
+          type: array
+          title: Website Sources
+        name:
+          type: string
+          maxLength: 2048
+          minLength: 1
+          title: Name
+          default: Unnamed Knowledge Base
+        description:
+          type: string
+          maxLength: 2048
+          title: Description
+          default: ''
+        indexing_params:
+          $ref: '#/components/schemas/KnowledgeBaseIndexingParamsRequest'
+        org_level_role:
+          anyOf:
+          - $ref: '#/components/schemas/KnowledgeBaseRole'
+          - type: 'null'
+      additionalProperties: false
+      type: object
+      title: CreateKnowledgeBaseRequest
+      description: Payload to create a new knowledge base.
+    ChunkerType:
+      type: string
+      enum:
+      - naive
+      - sentence
+      title: ChunkerType
+    ResourceUploadResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+        resource_id:
+          type: string
+          format: uuid
+          title: Resource Id
+      type: object
+      required:
+      - message
+      - resource_id
+      title: ResourceUploadResponse
+      description: Result of a file upload, including the resource ID for status polling.
+    MetadataSchema:
+      properties:
+        properties:
+          patternProperties:
+            ^[^\t\n\r\f\v]+$:
+              anyOf:
+              - $ref: '#/components/schemas/StringProperty'
+              - $ref: '#/components/schemas/NumberProperty'
+              - $ref: '#/components/schemas/BooleanProperty'
+              - $ref: '#/components/schemas/DateProperty'
+              - $ref: '#/components/schemas/StringListProperty'
+          propertyNames:
+            maxLength: 64
+            minLength: 1
+          type: object
+          title: Properties
+      type: object
+      required:
+      - properties
+      title: MetadataSchema
     SelectedWebsiteSource:
       properties:
         source_type:
@@ -387,29 +468,99 @@ components:
       - selected_resources
       title: SelectedWebsiteSource
       description: A set of pages selected for indexing from a website source.
-    StringProperty:
+    KnowledgeBaseResourcesResponse:
+      additionalProperties: true
+      type: object
+    UpdateKnowledgeBaseRequest:
       properties:
-        type:
+        connection_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Connection Id
+        connection_source_ids:
+          items:
+            type: string
+          type: array
+          uniqueItems: true
+          title: Connection Source Ids
+        website_sources:
+          items:
+            $ref: '#/components/schemas/SelectedWebsiteSource'
+          type: array
+          title: Website Sources
+        name:
           type: string
-          const: string
-          title: Type
-          default: string
+          maxLength: 2048
+          minLength: 1
+          title: Name
+          default: Unnamed Knowledge Base
         description:
           type: string
-          maxLength: 1024
+          maxLength: 2048
           title: Description
           default: ''
-        order:
-          type: integer
-          minimum: 0
-          title: Order
-          description: Display order of this property within the schema.
-          default: 0
-        subtype:
-          $ref: '#/components/schemas/StringSubtypeEnum'
-          default: plain
+        indexing_params:
+          anyOf:
+          - $ref: '#/components/schemas/KnowledgeBaseIndexingParamsRequest'
+          - type: 'null'
+        org_level_role:
+          anyOf:
+          - $ref: '#/components/schemas/KnowledgeBaseRole'
+          - type: 'null'
+      additionalProperties: false
       type: object
-      title: StringProperty
+      title: UpdateKnowledgeBaseRequest
+      description: Updates to apply to an existing knowledge base.
+    StackFileStatusEnum:
+      type: string
+      enum:
+      - resource
+      - parsed
+      - indexed
+      - pending
+      - pending_delete
+      - deleted
+      - error
+      title: StackFileStatusEnum
+      description: Processing status of a file in a knowledge base.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    KnowledgeBaseResponseIndexingParams:
+      properties:
+        ocr:
+          type: boolean
+          title: Ocr
+          default: false
+        embedding_params:
+          $ref: '#/components/schemas/KnowledgeBaseResponseEmbeddingParams'
+        chunker_params:
+          $ref: '#/components/schemas/KnowledgeBaseChunkerParams'
+      type: object
+      required:
+      - embedding_params
+      title: KnowledgeBaseResponseIndexingParams
+      description: Indexing configuration of a knowledge base.
     PaginationDirection:
       type: string
       enum:
@@ -417,30 +568,6 @@ components:
       - prev
       title: PaginationDirection
       description: Direction for cursor-based pagination.
-    KnowledgeBaseIndexingParamsRequest:
-      properties:
-        ocr:
-          type: boolean
-          title: Ocr
-          default: false
-        embedding_params:
-          $ref: '#/components/schemas/CreateKnowledgeBaseEmbeddingParams'
-        chunker_params:
-          $ref: '#/components/schemas/KnowledgeBaseChunkerParams'
-      type: object
-      title: KnowledgeBaseIndexingParamsRequest
-      description: Parameters that control how documents are indexed into a knowledge base.
-    Body_uploadKnowledgeBaseResource:
-      properties:
-        file:
-          type: string
-          format: binary
-          title: File
-          description: The file to upload to the knowledge base
-      type: object
-      required:
-      - file
-      title: Body_uploadKnowledgeBaseResource
     KnowledgeBaseFileResponse:
       properties:
         knowledge_base_id:
@@ -520,59 +647,52 @@ components:
       - status
       title: KnowledgeBaseFileResponse
       description: A file stored in a knowledge base.
-    CreateKnowledgeBaseEmbeddingParams:
+    Body_uploadKnowledgeBaseResource:
       properties:
-        embedding_model:
+        file:
           type: string
-          title: Embedding Model
-          default: openai.text-embedding-3-large
-        api_key:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Api Key
-      additionalProperties: false
-      type: object
-      title: CreateKnowledgeBaseEmbeddingParams
-      description: Embedding configuration for a new knowledge base.
-    StringListOption:
-      properties:
-        id:
-          type: string
-          title: Id
-        label:
-          type: string
-          title: Label
-        description:
-          type: string
-          maxLength: 1024
-          title: Description
-          default: ''
-        color:
-          $ref: '#/components/schemas/StringListOptionColor'
-          default: gray
-        order:
-          type: integer
-          maximum: 10000000
-          minimum: 0
-          title: Order
-          default: 0
+          format: binary
+          title: File
+          description: The file to upload to the knowledge base
       type: object
       required:
-      - label
-      title: StringListOption
-    StackFileStatusEnum:
+      - file
+      title: Body_uploadKnowledgeBaseResource
+    KnowledgeBaseRole:
       type: string
       enum:
-      - resource
-      - parsed
-      - indexed
-      - pending
-      - pending_delete
-      - deleted
-      - error
-      title: StackFileStatusEnum
-      description: Processing status of a file in a knowledge base.
+      - viewer
+      - editor
+      - admin
+      title: KnowledgeBaseRole
+      description: A user's role within a knowledge base.
+    KnowledgeBaseChunkerParams:
+      properties:
+        chunk_size:
+          type: integer
+          minimum: 1
+          title: Chunk Size
+          default: 1500
+        chunk_overlap:
+          type: integer
+          minimum: 0
+          title: Chunk Overlap
+          default: 500
+        chunker_type:
+          $ref: '#/components/schemas/ChunkerType'
+          default: sentence
+      type: object
+      title: KnowledgeBaseChunkerParams
+      description: Chunking strategy for splitting documents during indexing.
+    StringSubtypeEnum:
+      type: string
+      enum:
+      - plain
+      - email
+      - url
+      - phone
+      - file_path
+      title: StringSubtypeEnum
     KnowledgeBaseResponse:
       properties:
         knowledge_base_id:
@@ -684,34 +804,6 @@ components:
       - org_id
       title: KnowledgeBaseResponse
       description: A knowledge base.
-    SelectedWebsiteSourceType:
-      type: string
-      enum:
-      - sitemap
-      - manual
-      title: SelectedWebsiteSourceType
-      description: The type of website source.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     DateProperty:
       properties:
         type:
@@ -732,6 +824,84 @@ components:
           default: 0
       type: object
       title: DateProperty
+    SelectedWebsiteSourceType:
+      type: string
+      enum:
+      - sitemap
+      - manual
+      title: SelectedWebsiteSourceType
+      description: The type of website source.
+    StringProperty:
+      properties:
+        type:
+          type: string
+          const: string
+          title: Type
+          default: string
+        description:
+          type: string
+          maxLength: 1024
+          title: Description
+          default: ''
+        order:
+          type: integer
+          minimum: 0
+          title: Order
+          description: Display order of this property within the schema.
+          default: 0
+        subtype:
+          $ref: '#/components/schemas/StringSubtypeEnum'
+          default: plain
+      type: object
+      title: StringProperty
+    KnowledgeBaseResponseEmbeddingParams:
+      properties:
+        embedding_model:
+          type: string
+          title: Embedding Model
+        api_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Api Key
+      type: object
+      required:
+      - embedding_model
+      title: KnowledgeBaseResponseEmbeddingParams
+      description: Embedding configuration of a knowledge base.
+    NumberProperty:
+      properties:
+        type:
+          type: string
+          const: number
+          title: Type
+          default: number
+        description:
+          type: string
+          maxLength: 1024
+          title: Description
+          default: ''
+        order:
+          type: integer
+          minimum: 0
+          title: Order
+          description: Display order of this property within the schema.
+          default: 0
+      type: object
+      title: NumberProperty
+    KnowledgeBaseIndexingParamsRequest:
+      properties:
+        ocr:
+          type: boolean
+          title: Ocr
+          default: false
+        embedding_params:
+          $ref: '#/components/schemas/CreateKnowledgeBaseEmbeddingParams'
+        chunker_params:
+          $ref: '#/components/schemas/KnowledgeBaseChunkerParams'
+      type: object
+      title: KnowledgeBaseIndexingParamsRequest
+      description: Parameters that control how documents are indexed into a knowledge base.
     StringListProperty:
       properties:
         type:
@@ -758,90 +928,56 @@ components:
       type: object
       title: StringListProperty
       description: A property that contains a list of strings. Can be used to store tags as well.
-    StringSubtypeEnum:
-      type: string
-      enum:
-      - plain
-      - email
-      - url
-      - phone
-      - file_path
-      title: StringSubtypeEnum
-    KnowledgeBaseChunkerParams:
+    StringListOption:
       properties:
-        chunk_size:
-          type: integer
-          minimum: 1
-          title: Chunk Size
-          default: 1500
-        chunk_overlap:
-          type: integer
-          minimum: 0
-          title: Chunk Overlap
-          default: 500
-        chunker_type:
-          $ref: '#/components/schemas/ChunkerType'
-          default: sentence
-      type: object
-      title: KnowledgeBaseChunkerParams
-      description: Chunking strategy for splitting documents during indexing.
-    CreateKnowledgeBaseRequest:
-      properties:
-        connection_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Connection Id
-        connection_source_ids:
-          items:
-            type: string
-          type: array
-          uniqueItems: true
-          title: Connection Source Ids
-        website_sources:
-          items:
-            $ref: '#/components/schemas/SelectedWebsiteSource'
-          type: array
-          title: Website Sources
-        name:
+        id:
           type: string
-          maxLength: 2048
-          minLength: 1
-          title: Name
-          default: Unnamed Knowledge Base
+          title: Id
+        label:
+          type: string
+          title: Label
         description:
           type: string
-          maxLength: 2048
+          maxLength: 1024
           title: Description
           default: ''
-        indexing_params:
-          $ref: '#/components/schemas/KnowledgeBaseIndexingParamsRequest'
-        org_level_role:
-          anyOf:
-          - $ref: '#/components/schemas/KnowledgeBaseRole'
-          - type: 'null'
-      additionalProperties: false
-      type: object
-      title: CreateKnowledgeBaseRequest
-      description: Payload to create a new knowledge base.
-    KnowledgeBaseSyncResponse:
-      properties:
-        message:
-          type: string
-          title: Message
-          description: Human-readable description of the started task.
-        status:
-          type: string
-          const: accepted
-          title: Status
-          description: Task status.
-          default: accepted
+        color:
+          $ref: '#/components/schemas/StringListOptionColor'
+          default: gray
+        order:
+          type: integer
+          maximum: 10000000
+          minimum: 0
+          title: Order
+          default: 0
       type: object
       required:
-      - message
-      title: KnowledgeBaseSyncResponse
-      description: Result of a knowledge base sync or reindex request.
+      - label
+      title: StringListOption
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    CreateKnowledgeBaseEmbeddingParams:
+      properties:
+        embedding_model:
+          type: string
+          title: Embedding Model
+          default: openai.text-embedding-3-large
+        api_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Api Key
+      additionalProperties: false
+      type: object
+      title: CreateKnowledgeBaseEmbeddingParams
+      description: Embedding configuration for a new knowledge base.
     BooleanProperty:
       properties:
         type:
@@ -862,41 +998,23 @@ components:
           default: 0
       type: object
       title: BooleanProperty
-    HTTPValidationError:
+    KnowledgeBaseSyncResponse:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    KnowledgeBaseResponseEmbeddingParams:
-      properties:
-        embedding_model:
+        message:
           type: string
-          title: Embedding Model
-        api_key:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Api Key
+          title: Message
+          description: Human-readable description of the started task.
+        status:
+          type: string
+          const: accepted
+          title: Status
+          description: Task status.
+          default: accepted
       type: object
       required:
-      - embedding_model
-      title: KnowledgeBaseResponseEmbeddingParams
-      description: Embedding configuration of a knowledge base.
-    KnowledgeBaseRole:
-      type: string
-      enum:
-      - viewer
-      - editor
-      - admin
-      title: KnowledgeBaseRole
-      description: A user's role within a knowledge base.
-    KnowledgeBaseResourcesResponse:
-      additionalProperties: true
-      type: object
+      - message
+      title: KnowledgeBaseSyncResponse
+      description: Result of a knowledge base sync or reindex request.
     StringListOptionColor:
       type: string
       enum:
@@ -908,124 +1026,6 @@ components:
       - gray
       title: StringListOptionColor
       description: Store the different colors that can be used for the string list options.
-    ResourceUploadResponse:
-      properties:
-        message:
-          type: string
-          title: Message
-        resource_id:
-          type: string
-          format: uuid
-          title: Resource Id
-      type: object
-      required:
-      - message
-      - resource_id
-      title: ResourceUploadResponse
-      description: Result of a file upload, including the resource ID for status polling.
-    ChunkerType:
-      type: string
-      enum:
-      - naive
-      - sentence
-      title: ChunkerType
-    UpdateKnowledgeBaseRequest:
-      properties:
-        connection_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Connection Id
-        connection_source_ids:
-          items:
-            type: string
-          type: array
-          uniqueItems: true
-          title: Connection Source Ids
-        website_sources:
-          items:
-            $ref: '#/components/schemas/SelectedWebsiteSource'
-          type: array
-          title: Website Sources
-        name:
-          type: string
-          maxLength: 2048
-          minLength: 1
-          title: Name
-          default: Unnamed Knowledge Base
-        description:
-          type: string
-          maxLength: 2048
-          title: Description
-          default: ''
-        indexing_params:
-          anyOf:
-          - $ref: '#/components/schemas/KnowledgeBaseIndexingParamsRequest'
-          - type: 'null'
-        org_level_role:
-          anyOf:
-          - $ref: '#/components/schemas/KnowledgeBaseRole'
-          - type: 'null'
-      additionalProperties: false
-      type: object
-      title: UpdateKnowledgeBaseRequest
-      description: Updates to apply to an existing knowledge base.
-    NumberProperty:
-      properties:
-        type:
-          type: string
-          const: number
-          title: Type
-          default: number
-        description:
-          type: string
-          maxLength: 1024
-          title: Description
-          default: ''
-        order:
-          type: integer
-          minimum: 0
-          title: Order
-          description: Display order of this property within the schema.
-          default: 0
-      type: object
-      title: NumberProperty
-    KnowledgeBaseResponseIndexingParams:
-      properties:
-        ocr:
-          type: boolean
-          title: Ocr
-          default: false
-        embedding_params:
-          $ref: '#/components/schemas/KnowledgeBaseResponseEmbeddingParams'
-        chunker_params:
-          $ref: '#/components/schemas/KnowledgeBaseChunkerParams'
-      type: object
-      required:
-      - embedding_params
-      title: KnowledgeBaseResponseIndexingParams
-      description: Indexing configuration of a knowledge base.
-    MetadataSchema:
-      properties:
-        properties:
-          patternProperties:
-            ^[^\t\n\r\f\v]+$:
-              anyOf:
-              - $ref: '#/components/schemas/StringProperty'
-              - $ref: '#/components/schemas/NumberProperty'
-              - $ref: '#/components/schemas/BooleanProperty'
-              - $ref: '#/components/schemas/DateProperty'
-              - $ref: '#/components/schemas/StringListProperty'
-          propertyNames:
-            maxLength: 64
-            minLength: 1
-          type: object
-          title: Properties
-      type: object
-      required:
-      - properties
-      title: MetadataSchema
   securitySchemes:
     OAuth2PasswordBearer:
       type: oauth2
